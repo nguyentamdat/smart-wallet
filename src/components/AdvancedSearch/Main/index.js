@@ -3,8 +3,8 @@ import { Text, View } from "react-native";
 import { Button } from "react-native-elements";
 import { createStackNavigator, createAppContainer } from "react-navigation";
 //  All child-component
-import MoneyFilterScreen from "../MoneyFilter/index";
-import PurposeFilterScreen from "../PurposeFilter/index";
+import MoneyFilterScreen from "../MoneyFilter";
+import PurposeFilterScreen from "../PurposeFilter";
 import TimeFilterScreen from "../TimeFilter";
 import NoteFilterScreen from "../NoteFilter";
 //  Styles for global use
