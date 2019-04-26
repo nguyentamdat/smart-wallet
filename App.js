@@ -1,23 +1,9 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- *
- */
-
 import React, { Component } from "react";
-import { Platform, StyleSheet, Text, View, StatusBar } from "react-native";
-import Transaction from "./src/components/Transaction";
-import { Button, ThemeProvider } from "react-native-elements";
+import { StyleSheet, Text, View } from "react-native";
+import AdvancedSearch from "./src/components/AdvancedSearch";
 
 export default class App extends Component {
-  render() {
-    return (
-      <View>
-        <StatusBar hidden />
-        <Transaction />
-      </View>
-    );
-  }
+    render() {
+        return <AdvancedSearch />;
+    }
 }
