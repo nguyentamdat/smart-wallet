@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View } from "react-native";
-import AdvancedSearch from "./src/components/AdvancedSearch";
+import AdvancedSearch from "./src/AdvancedSearch/main.js";
 
 export default class App extends Component {
     render() {
