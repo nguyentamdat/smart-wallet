@@ -1,5 +1,10 @@
 import React, { Component } from "react";
-import { View, DatePickerAndroid, TimePickerAndroid } from "react-native";
+import {
+  View,
+  DatePickerAndroid,
+  TimePickerAndroid,
+  Picker
+} from "react-native";
 import {
   Header,
   Card,
@@ -10,12 +15,15 @@ import {
 } from "react-native-elements";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
-class Transaction extends Component {
+class AddTransaction extends Component {
   constructor(props) {
     super(props);
     const obj = new Date();
     this.state = {
       repeated: false,
+      amount: null,
+      purpose: "",
+      note: "",
       date: {
         year: obj.getFullYear(),
         month: obj.getMonth(),
@@ -66,6 +74,7 @@ class Transaction extends Component {
     return (
       <View style={{ flexDirection: "column" }}>
         <Header
+          containerStyle={{ paddingTop: 0 }}
           leftComponent={{
             type: "material-community",
             icon: "menu",
@@ -84,12 +93,24 @@ class Transaction extends Component {
         <Card>
           <Input
             placeholder="Số tiền"
+            value={this.state.amount}
+            name="amount"
+            onChangeText={amount => this.setState({ amount })}
             keyboardType="numeric"
             rightIcon={<Image source={{ uri: "../../public/dong.png" }} />}
           />
-          <Input placeholder="Mục đích" />
+          <Picker
+            selectedValue={this.state.purpose}
+            onValueChange={(ItemValue, ItemIndex) =>
+              this.setState({ purpose: ItemValue })
+            }
+          >
+            <Picker.Item label="An uong" value="anuong" />
+            <Picker.Item label="Di lai" value="dilai" />
+          </Picker>
           <CheckBox
             title="Lặp lại"
+            name="repeated"
             checked={this.state.repeated}
             onPress={() => this.setState({ repeated: !this.state.repeated })}
             checkedIcon="dot-circle-o"
@@ -102,16 +123,28 @@ class Transaction extends Component {
               borderColor: "grey"
             }}
           />
-          <Input placeholder="Ghi chú" />
+          <Input
+            placeholder="Ghi chú"
+            name="note"
+            value={this.state.note}
+            onChangeText={note => this.setState({ note })}
+          />
           <View>
             <Button title={dateToText} onPress={this.datePicker} type="clear" />
             <Button title={timeToText} onPress={this.timePicker} type="clear" />
           </View>
         </Card>
-        <Button title="Lưu" type="clear" buttonStyle={{ alignSelf: "auto" }} />
+        <Button
+          title="Lưu"
+          type="clear"
+          buttonStyle={{ alignSelf: "auto" }}
+          onPress={() => {
+            console.log(this.state);
+          }}
+        />
       </View>
     );
   }
 }
 
-export default Transaction;
+export default AddTransaction;
