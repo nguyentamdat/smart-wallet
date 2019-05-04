@@ -10,18 +10,22 @@ import React, { Component } from "react";
 import { Platform, StyleSheet, Text, View, StatusBar } from "react-native";
 import AddTransaction from "./src/components/Transaction";
 import PurposeSelect from "./src/components/Purpose";
+import Main from "./src/components/Main";
 import { Button, ThemeProvider } from "react-native-elements";
 import { createAppContainer, createStackNavigator } from "react-navigation";
 import * as firebase from "firebase";
 import "firebase/firestore";
+import MainView from "./components/MainView";
 
 const navigator = createStackNavigator(
   {
     Transaction: AddTransaction,
-    Purpose: PurposeSelect
+    Purpose: PurposeSelect,
+    Main: Main,
+    Plan: MainView
   },
   {
-    initialRouteName: "Transaction",
+    initialRouteName: "Main",
     defaultNavigationOptions: {},
     headerMode: "none"
   }
@@ -39,13 +43,6 @@ export default class App extends Component {
   }
   componentDidMount() {
     var db = firebase.firestore();
-    db.collection("purposes")
-      .get()
-      .then(querySnapshot => {
-        querySnapshot.forEach(doc => {
-          console.log(`${doc.id} => ${JSON.stringify(doc.data())}`);
-        });
-      });
   }
   render() {
     return <AppContainer />;
