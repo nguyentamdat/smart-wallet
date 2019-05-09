@@ -16,51 +16,32 @@ import {
     ListItem,
     View
 } from "native-base";
-import SearchByMoney from "./screens/SearchByMoney.js";
-import SearchByPurpose from "./screens/SearchByPurpose.js";
-import SearchByTime from "./screens/SearchByTime.js";
-import SearchByNote from "./screens/SearchByNote.js";
-import styles from "./styles.js";
+import { createStackNavigator, createAppContainer } from "react-navigation";
+import AdvancedSearchScreen from "./screens/AdvancedSearch";
+import ListOfPurpose from "./screens/ListOfPurpose";
+import styles from "./styles";
+
+const AppNavigator = createStackNavigator({
+    AdvancedSearch: {
+        screen: AdvancedSearchScreen,
+        navigationOptions: ({ navigation }) => ({
+            header: null
+        })
+    },
+    ListOfPurpose: {
+        screen: ListOfPurpose,
+        navigationOptions: ({ navigation }) => ({
+            header: null
+        })
+    }
+});
+const AppContainer = createAppContainer(AppNavigator);
 
 export default class AdvancedSearch extends Component {
     constructor() {
         super();
     }
-
     render() {
-        return (
-            <Container style={styles.container}>
-                <Header>
-                    <Left>
-                        <Button transparent>
-                            <Icon name="menu" />
-                        </Button>
-                    </Left>
-                    <Body>
-                        <Title style={{ textTransform: "uppercase" }}>
-                            tìm kiếm nâng cao
-                        </Title>
-                    </Body>
-                </Header>
-
-                <Content>
-                    <SearchByMoney />
-                    <SearchByPurpose />
-                    <SearchByTime />
-                    <SearchByNote />
-                </Content>
-
-                <View style={styles.footer}>
-                    <Button iconLeft style={styles.footerButton}>
-                        <Icon type="AntDesign" name="reload1" />
-                        <Text>Mặc định</Text>
-                    </Button>
-                    <Button iconLeft style={styles.footerButton}>
-                        <Icon type="AntDesign" name="search1" />
-                        <Text>Xác nhận</Text>
-                    </Button>
-                </View>
-            </Container>
-        );
+        return <AppContainer />;
     }
 }

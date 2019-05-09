@@ -1,6 +1,4 @@
-import { Dimensions } from "react-native";
-
-const { HEIGHT, WIDTH } = Dimensions.get("window");
+import variables from "../variables/platform";
 
 export default {
     container: {
@@ -46,10 +44,16 @@ export default {
         flexDirection: "row",
         justifyContent: "space-between",
         height: 60,
-        marginLeft: 10,
-        marginRight: 10
+        paddingLeft: 10,
+        paddingRight: 10
     },
     footerButton: {
-        alignSelf: "center"
+        alignSelf: "center",
+        justifyContent: "center"
+    },
+    iconListItem: {
+        marginLeft: 0,
+        paddingLeft: 0,
+        width: 65
     }
 };
