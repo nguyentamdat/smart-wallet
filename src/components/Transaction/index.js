@@ -14,6 +14,7 @@ import {
   Image
 } from "react-native-elements";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import { moveToBottom } from "../common";
 
 class AddTransaction extends Component {
   constructor(props) {
@@ -72,7 +73,7 @@ class AddTransaction extends Component {
     if (minute < 10) minute = "0" + minute;
     const timeToText = hour + ":" + minute;
     return (
-      <View style={{ flexDirection: "column" }}>
+      <View style={{ flex: 1 }}>
         <Header
           containerStyle={{ paddingTop: 0 }}
           leftComponent={{
@@ -134,14 +135,15 @@ class AddTransaction extends Component {
             <Button title={timeToText} onPress={this.timePicker} type="clear" />
           </View>
         </Card>
-        <Button
-          title="Lưu"
-          type="clear"
-          buttonStyle={{ alignSelf: "auto" }}
-          onPress={() => {
-            console.log(this.state);
-          }}
-        />
+        {moveToBottom(
+          <Button
+            title="Lưu"
+            buttonStyle={{ alignSelf: "center", width: 100 }}
+            onPress={() => {
+              console.log(this.state);
+            }}
+          />
+        )}
       </View>
     );
   }
