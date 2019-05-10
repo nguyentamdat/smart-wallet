@@ -1,8 +1,13 @@
 import React, { Component } from "react";
-import { Text, View, FlatList, Alert } from "react-native";
-import { Button, ButtonGroup } from "react-native-elements";
+import { Text, View, FlatList, Alert, TextInput } from "react-native";
+//import Button from "react-native-button";
+import { Button } from "react-native-elements";
 import flatListData from "./FlatListData";
 import Swipeout from "react-native-swipeout";
+import AddRecordModal from "./AddRecordModal";
+import firebase from "react-native-firebase";
+import { createStackNavigator, createAppContainer, StackNavigator } from 'react-navigation';
+//import console = require("console");
 
 class FlatListItem extends Component {
   render() {
@@ -13,19 +18,29 @@ class FlatListItem extends Component {
       right: [
         {
           onPress: () => {
-            alert("Đã nhấn Xem");
+            //alert("Đã nhấn Xem");
+            this.props.man_view_ref.props.navigation.navigate('SPRecordScreen', {
+              itemId: this.props.item.id,
+              item: this.props.item,
+            });
+            //alert(this.props.navigation);
+
           },
           text: "Xem",
           type: "primary"
         },
         {
           onPress: () => {
-            alert("Đã nhấn Xóa");
+            //alert("Đã nhấn Xóa");
+            firebase.firestore().collection('SPRecordList')
+            .doc(this.props.item.id).delete();
           },
           text: "Xóa",
           type: "delete"
         }
-      ]
+      ],
+      rowID: this.props.index,
+      sectionId: 1
     };
     return (
       <Swipeout {...swipeSettings}>
@@ -49,6 +64,7 @@ class FlatListItem extends Component {
           >
             {this.props.item.name}
           </Text>
+          <Text style={{ fontSize: 18 }}>Id: {this.props.item.id}</Text>
         </View>
       </Swipeout>
     );
@@ -57,9 +73,47 @@ class FlatListItem extends Component {
 export default class MainView extends Component {
   constructor(props) {
     super(props);
+    this.ref = firebase.firestore().collection("SPRecordList");
+
+    this.state = {
+      // for firestore
+      loading: true,
+      record: []
+
+      // for other
+    };
+
+    this._onPressAdd = this._onPressAdd.bind(this);
   }
+
+  onCollectionUpdate = querySnapshot => {
+    // firestore
+    const names = [];
+    querySnapshot.forEach(doc => {
+      names.push({
+        id: doc.id,
+        name: doc.data().name
+      });
+    });
+    this.setState({
+      record: names,
+      loading: false
+    });
+  };
+
+  componentDidMount() {
+    // firestore
+    this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate);
+    // this.unsubscribe = this.ref.onSnapshot((querySnapshot) => {
+
+    //   });
+  }
+
+  _onPressAdd() {
+    this.refs.addRecordModal.showAddRecordModal();
+  }
+
   render() {
-    const buttons = ["Xóa", "Xem", "Tạo bản ghi mới"];
     return (
       <View style={{ flex: 1 }}>
         <View>
@@ -89,37 +143,26 @@ export default class MainView extends Component {
           }}
         >
           <FlatList
-            data={flatListData}
+            data={this.state.record}
             renderItem={({ item, index }) => {
-              return <FlatListItem item={item} index={index} />;
+              return (<FlatListItem 
+              item={item} 
+              index={index} 
+              man_view_ref={this}
+              />);
             }}
+            keyExtractor={(item, index) => item.id}
           />
         </View>
 
-        {/* <ButtonGroup
-                buttons={buttons}
-                containerStyle={{height: 60}}
-                /> */}
+        <AddRecordModal ref={"addRecordModal"} />
 
-        {/* <View style={{
-                    height: 60, 
-                    flexDirection: 'row', 
-                    justifyContent: 'flex-end',
-                    margin: 10,
-                    
-                    }}>
-                <Button
-                title='Thoát'
-                containerStyle={{width:85}}
-                />
-                </View> */}
-
-        <View style={{ margin: 3 }}>
+        <View style={{ marginTop: 3 }}>
           <Button
             title="Tạo bản ghi mới"
             containerStyle={{ borderWidth: 1 }}
             type="outline"
-            raised
+            //raised
             onPress={this._onPressAdd}
           />
         </View>
@@ -132,10 +175,16 @@ export default class MainView extends Component {
             margin: 10
           }}
         >
-          <Button
-            title="Thoát"
-            containerStyle={{ width: 85 }}
-            onPress={() => this.props.navigation.goBack()}
+          <Button 
+          type="outline" 
+          title="Thoát" 
+          containerStyle={{ width: 85 }} 
+          onPress={ () => {
+            console.log('Press Back');
+            this.props.navigation.navigate('Main');
+
+          }}
+
           />
         </View>
       </View>

@@ -8,13 +8,15 @@ import { createAppContainer, createStackNavigator } from "react-navigation";
 import * as firebase from "firebase";
 import "firebase/firestore";
 import MainView from "./components/MainView";
+import RecordView from "./components/RecordView";
 
 const navigator = createStackNavigator(
   {
     Transaction: AddTransaction,
     Purpose: PurposeSelect,
     Main: Main,
-    Plan: MainView
+    SPMainScreen: MainView,
+    SPRecordScreen: RecordView,
   },
   {
     initialRouteName: "Main",
