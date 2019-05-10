@@ -17,6 +17,7 @@ import * as firebase from "firebase";
 import "firebase/firestore";
 import MainView from "./components/MainView";
 import RecordView from "./components/RecordView";
+import NotificationScreen from "./src/components/NotificationScreen";
 
 const navigator = createStackNavigator(
   {
@@ -25,6 +26,7 @@ const navigator = createStackNavigator(
     Main: Main,
     SPMainScreen: MainView,
     SPRecordScreen: RecordView,
+    NotificationView: NotificationScreen
   },
   {
     initialRouteName: "Main",
@@ -34,6 +36,7 @@ const navigator = createStackNavigator(
 );
 
 const AppContainer = createAppContainer(navigator);
+
 export default class App extends Component {
   componentWillMount() {
     var config = {
@@ -50,3 +53,4 @@ export default class App extends Component {
     return <AppContainer />;
   }
 }
+

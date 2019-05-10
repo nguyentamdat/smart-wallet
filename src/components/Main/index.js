@@ -21,13 +21,14 @@ class Main extends Component {
             color: "#fff"
           }}
           centerComponent={{
-            text: "Trang chính",
+            text: "Màn hình chính",
             style: { color: "#fff", fontSize: 30 }
           }}
           rightComponent={{
             type: "material-community",
             icon: "bell",
-            color: "#fff"
+            color: "#fff",
+            onPress: () => this.props.navigation.navigate("NotificationView") 
           }}
         />
         <Button
