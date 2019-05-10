@@ -8,7 +8,7 @@ import {
   ThemeProvider
 } from "react-native-elements";
 //import {icon} from 'react-native-vector-icons'
-import recordList from "./RecordList";
+//import recordList from "./RecordList";
 import { Calendar, CalendarList, Agenda } from "react-native-calendars";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { Input } from "react-native-elements";
@@ -21,7 +21,6 @@ import EditModal from "./EditModal";
 import CalendarModal from "./CalendarModal";
 
 import firebase from "react-native-firebase";
-import Todo from "./Todo";
 import { YellowBox } from "react-native";
 YellowBox.ignoreWarnings(["Require cycle:"]);
 
@@ -242,7 +241,6 @@ export default class RecordView extends Component {
     const todos = [];
     querySnapshot.forEach( (doc) => {
       //const { db_category, db_amount, db_description } = doc.data();
-
       todos.push({
         id: doc.id,
         category: doc.data().category,
@@ -337,7 +335,9 @@ export default class RecordView extends Component {
       <View style={{ flex: 1 }}>
         <Header
           leftComponent={{ icon: "menu", color: "#fff" }}
-          centerComponent={{ text: this.state.record_name, style: { color: "#fff" } }}
+          centerComponent={{ 
+            text: this.state.record_name, 
+            style: { color: "#fff", fontSize: 27 } }}
           rightComponent={{ icon: "home", color: "#fff" }}
         />
 

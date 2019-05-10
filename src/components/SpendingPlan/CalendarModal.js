@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {
     AppResistry, FlatList, StyleSheet, Text, View, Image, Alert,
     Platform, TouchableHighlight, Dimensions,
-    TextInput, DatePickerAndroid   
+    TextInput,
 } from 'react-native';
 import Button from 'react-native-button';
 import Modal from 'react-native-modalbox';
