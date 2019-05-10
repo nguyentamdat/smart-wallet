@@ -22,7 +22,8 @@ const navigator = createStackNavigator(
     Transaction: AddTransaction,
     Purpose: PurposeSelect,
     Main: Main,
-    Plan: MainView
+    SPMainScreen: MainView,
+    SPRecordScreen: RecordView,
   },
   {
     initialRouteName: "Main",
