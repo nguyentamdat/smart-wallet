@@ -3,6 +3,8 @@ import { Text, View } from "react-native";
 import { Header, Button } from "react-native-elements";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { moveToBottom } from "../common";
+import { YellowBox } from 'react-native';
+YellowBox.ignoreWarnings(['WebView']);
 
 class Main extends Component {
   constructor(props) {
