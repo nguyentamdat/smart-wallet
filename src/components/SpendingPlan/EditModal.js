@@ -14,7 +14,6 @@ import {
 } from "react-native";
 import Button from "react-native-button";
 import Modal from "react-native-modalbox";
-import recordList from "./RecordList";
 import firebase from "react-native-firebase";
 
 var screen = Dimensions.get("window");

@@ -2,11 +2,9 @@ import React, { Component } from "react";
 import { Text, View, FlatList, Alert, TextInput } from "react-native";
 //import Button from "react-native-button";
 import { Button } from "react-native-elements";
-import flatListData from "./FlatListData";
 import Swipeout from "react-native-swipeout";
 import AddRecordModal from "./AddRecordModal";
 import firebase from "react-native-firebase";
-import { createStackNavigator, createAppContainer, StackNavigator } from 'react-navigation';
 //import console = require("console");
 
 class FlatListItem extends Component {

@@ -15,8 +15,8 @@ import { Button, ThemeProvider } from "react-native-elements";
 import { createAppContainer, createStackNavigator } from "react-navigation";
 import * as firebase from "firebase";
 import "firebase/firestore";
-import MainView from "./components/MainView";
-import RecordView from "./components/RecordView";
+import MainView from "./src/components/SpendingPlan/MainView"
+import RecordView from "./src/components/SpendingPlan/RecordView";
 
 const navigator = createStackNavigator(
   {
