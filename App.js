@@ -1,11 +1,3 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- *
- */
-
 import React, { Component } from "react";
 import { Platform, StyleSheet, Text, View, StatusBar } from "react-native";
 import AddTransaction from "./src/components/Transaction";
@@ -33,16 +25,18 @@ const navigator = createStackNavigator(
 
 const AppContainer = createAppContainer(navigator);
 export default class App extends Component {
-  componentWillMount() {
-    var config = {
-      apiKey: "AIzaSyChLykabtAmjvgi1rnAqWB9l2kiRXKHwaU",
-      authDomain: "srem-b062f.firebaseapp.com",
-      projectId: "srem-b062f"
-    };
-    firebase.initializeApp(config);
-  }
-  componentDidMount() {
-    var db = firebase.firestore();
+  async componentWillMount() {
+    try {
+      var config = {
+        apiKey: "AIzaSyChLykabtAmjvgi1rnAqWB9l2kiRXKHwaU",
+        authDomain: "srem-b062f.firebaseapp.com",
+        projectId: "srem-b062f"
+      };
+      await firebase.initializeApp(config);
+      const db = await firebase.firestore();
+    } catch (e) {
+      console.log(e);
+    }
   }
   render() {
     return <AppContainer />;
