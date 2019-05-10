@@ -31,7 +31,7 @@ class Main extends Component {
         <Button
           title="Thêm Kế Hoạch"
           onPress={() => {
-            this.props.navigation.navigate("Plan");
+            this.props.navigation.navigate("SPMainScreen");
           }}
         />
         {moveToBottom(
