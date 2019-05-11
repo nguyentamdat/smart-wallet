@@ -3,8 +3,10 @@ import { Text, View } from "react-native";
 import { Header, Button } from "react-native-elements";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { moveToBottom } from "../common";
-import { YellowBox } from 'react-native';
-YellowBox.ignoreWarnings(['WebView']);
+import AsyncStorage from "@react-native-community/async-storage";
+import { YellowBox } from "react-native";
+import firebase from "react-native-firebase";
+YellowBox.ignoreWarnings(["WebView"]);
 
 class Main extends Component {
   constructor(props) {
@@ -12,7 +14,7 @@ class Main extends Component {
   }
   render() {
     return (
-      <View style={{ alignItems: "center", flex: 1, justifyContent: "center" }}>
+      <View style={{ flex: 1, justifyContent: "center" }}>
         <Header
           containerStyle={{ paddingTop: 0 }}
           leftComponent={{
@@ -28,7 +30,7 @@ class Main extends Component {
             type: "material-community",
             icon: "bell",
             color: "#fff",
-            onPress: () => this.props.navigation.navigate("NotificationView") 
+            onPress: () => this.props.navigation.navigate("NotificationView")
           }}
         />
         <Button
@@ -50,6 +52,12 @@ class Main extends Component {
                 }}
               />
             }
+            buttonStyle={{
+              width: 60,
+              height: 60,
+              alignSelf: "center",
+              margin: 0
+            }}
           />
         )}
       </View>
