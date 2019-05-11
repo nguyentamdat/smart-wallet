@@ -24,7 +24,7 @@ export default class EditModal extends Component {
       editingCategory: "",
       editingAmount: "",
       editingDescription: "",
-      item_id: "123",
+      item_id: "",
     };
 
   }

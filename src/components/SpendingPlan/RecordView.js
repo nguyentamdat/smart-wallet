@@ -247,7 +247,7 @@ export default class RecordView extends Component {
         amount: doc.data().amount,
         description: doc.data().description
       });
-      console.log('category_name: $(category_name)');
+      console.log('category_name: ${category_name}');
 
     });
     this.setState({

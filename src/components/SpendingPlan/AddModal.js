@@ -137,7 +137,7 @@ export default class AddModal extends Component {
               amount: this.state.newAmount,
               description: this.state.newDescription
             };
-            recordList.push(newItem);
+            //recordList.push(newItem);
             // this.props.parentFlatList.refreshFlatList(newKey); // check firestore
 
             // firestore
