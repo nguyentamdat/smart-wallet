@@ -139,7 +139,7 @@ export default class AddModal extends Component {
               description: this.state.newDescription,
               
             });
-            
+
             this.refs.myModal.close();
           }}
         >

@@ -131,35 +131,6 @@ export default class EditModal extends Component {
               alert("Bạn chưa nhập đủ thông tin!!");
               return;
             }
-            //Update existing Food
-
-            // var foundIndex = recordList.findIndex(item => this.state.key == item.key);
-            // if (foundIndex < 0) {
-            //     return; //not found
-            // }
-            // recordList[foundIndex].category = this.state.editingCategory;
-            // recordList[foundIndex].amount = this.state.editingAmount;
-            // recordList[foundIndex].description = this.state.editingDescription;
-            
-            //alert(this.state.item_id);
-            // firebase
-            //   .firestore()
-            //   .collection("todos")
-            //   .where("uid", "==", this.state.item_id)
-            //   .get()
-            //   .then(function(querySnapshot) {
-            //     querySnapshot.forEach(function(doc) {
-            //       //console.log(doc.id, " => ", doc.data());
-            //       // Build doc ref from doc.id
-            //       firebase.firestore().collection("todos")
-            //         .doc(doc.id)
-            //         .update({ 
-            //             category: this.state.editingCategory,
-            //             amount: this.state.editingAmount,
-            //             description: 'test edit modal'
-            //             });
-            //     });
-            //   });
 
             firebase.firestore().collection('SPRecordList')
             .doc(this.props.parentFlatList.props.navigation.getParam('itemId', 'noId'))
@@ -170,8 +141,7 @@ export default class EditModal extends Component {
                 description: this.state.editingDescription
             });
 
-            //Refresh flatlist item
-            //this.state.flatlistItem.refreshFlatListItem();
+            
 
             this.refs.myModal.close();
           }}
