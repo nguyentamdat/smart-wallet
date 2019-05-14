@@ -1,13 +1,12 @@
 import React, { Component } from "react";
 import { Text, View, FlatList, Alert, TextInput } from "react-native";
-//import Button from "react-native-button";
 import { Button } from "react-native-elements";
 import Swipeout from "react-native-swipeout";
 import AddRecordModal from "./AddRecordModal";
 import firebase from "react-native-firebase";
 //import console = require("console");
 
-class FlatListItem extends Component {
+class NameItem extends Component {
   render() {
     const swipeSettings = {
       autoClose: true,
@@ -16,20 +15,16 @@ class FlatListItem extends Component {
       right: [
         {
           onPress: () => {
-            //alert("Đã nhấn Xem");
-            this.props.man_view_ref.props.navigation.navigate('SPRecordScreen', {
+            this.props.refMainView.props.navigation.navigate('SPRecordScreen', {
               itemId: this.props.item.id,
               item: this.props.item,
             });
-            //alert(this.props.navigation);
-
           },
           text: "Xem",
           type: "primary"
         },
         {
           onPress: () => {
-            //alert("Đã nhấn Xóa");
             firebase.firestore().collection('SPRecordList')
             .doc(this.props.item.id).delete();
           },
@@ -77,8 +72,6 @@ export default class MainView extends Component {
       // for firestore
       loading: true,
       record: []
-
-      // for other
     };
 
     this._onPressAdd = this._onPressAdd.bind(this);
@@ -102,9 +95,6 @@ export default class MainView extends Component {
   componentDidMount() {
     // firestore
     this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate);
-    // this.unsubscribe = this.ref.onSnapshot((querySnapshot) => {
-
-    //   });
   }
 
   _onPressAdd() {
@@ -143,10 +133,10 @@ export default class MainView extends Component {
           <FlatList
             data={this.state.record}
             renderItem={({ item, index }) => {
-              return (<FlatListItem 
+              return (<NameItem 
               item={item} 
               index={index} 
-              man_view_ref={this}
+              refMainView={this}
               />);
             }}
             keyExtractor={(item, index) => item.id}
@@ -178,9 +168,7 @@ export default class MainView extends Component {
           title="Thoát" 
           containerStyle={{ width: 85 }} 
           onPress={ () => {
-            console.log('Press Back');
             this.props.navigation.navigate('Main');
-
           }}
 
           />

@@ -18,9 +18,7 @@ export default class AddRecordModal extends Component {
     this.unsubcribe = null;
 
     this.state = {
-      record_name: "",
-      newAmount: "",
-      newDescription: "",
+      recordName: "",
       //selectedDate: '2019-05-08'
     };
   }
@@ -69,9 +67,9 @@ export default class AddRecordModal extends Component {
             marginBottom: 10,
             borderBottomWidth: 1
           }}
-          onChangeText={text => this.setState({ record_name: text })}
+          onChangeText={text => this.setState({ recordName: text })}
           placeholder=""
-          value={this.state.record_name}
+          value={this.state.recordName}
         />
 
         <Button
@@ -86,7 +84,7 @@ export default class AddRecordModal extends Component {
           }}
           onPress={() => {
             if (
-              this.state.record_name.length == 0 
+              this.state.recordName.length == 0 
             ) {
               alert("Bạn chưa nhập tên bản ghi\nKéo xuống để Cancel");
               return;
@@ -94,7 +92,7 @@ export default class AddRecordModal extends Component {
             
             // firestore
             this.ref.add({
-              name: this.state.record_name
+              name: this.state.recordName
             });
             this.refs.currentModal.close();
           }}

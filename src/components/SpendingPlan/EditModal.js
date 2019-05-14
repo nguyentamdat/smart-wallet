@@ -28,18 +28,8 @@ export default class EditModal extends Component {
     };
 
   }
-  // showEditModal = (editingItem, flatlistItem_para) => {
-  //     this.setState({
-  //         key: editingItem.key,
-  //         category: editingItem.category,
-  //         amount: editingItem.amount,
-  //         description: editingItem.description,
-  //         flatlistItem: flatlistItem_para,
-  //     })
-  //     this.refs.myModal.open();
-  // }
   
-  showEditModal = (itemId, flatlistItem_para) => {
+  showEditModal = () => {
     //this.props.parentFlatList.refs.editModal.setState({item_id: itemId});
     this.refs.myModal.open();
     //alert('Hello '+this.state.item_id);
@@ -101,6 +91,7 @@ export default class EditModal extends Component {
             borderBottomWidth: 1
           }}
           onChangeText={text => this.setState({ editingAmount: text })}
+          keyboardType='numeric'
           placeholder="Nhập số tiền"
           value={this.state.editingAmount}
         />

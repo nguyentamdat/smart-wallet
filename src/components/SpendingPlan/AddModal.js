@@ -92,6 +92,7 @@ export default class AddModal extends Component {
             borderBottomWidth: 1
           }}
           onChangeText={text => this.setState({ newAmount: text })}
+          keyboardType='numeric'
           placeholder="Nhập số tiền"
           value={this.state.newAmount}
         />
@@ -130,16 +131,7 @@ export default class AddModal extends Component {
               alert("Bạn chưa nhập đủ thông tin!!");
               return;
             }
-            const newKey = this.generateKey(24);
-            const newItem = {
-              key: newKey,
-              category: this.state.newCategory,
-              amount: this.state.newAmount,
-              description: this.state.newDescription
-            };
-            //recordList.push(newItem);
-            // this.props.parentFlatList.refreshFlatList(newKey); // check firestore
-
+            
             // firestore
             this.ref.add({
               category: this.state.newCategory,
