@@ -19,7 +19,6 @@ export default class AddRecordModal extends Component {
 
     this.state = {
       recordName: "",
-      //selectedDate: '2019-05-08'
     };
   }
   showAddRecordModal = () => {
@@ -42,6 +41,7 @@ export default class AddRecordModal extends Component {
         }}
         position="center"
         backdrop={true}
+        backdropPressToClose={false}
         onClosed={() => {
           //alert("Modal closed");
         }}

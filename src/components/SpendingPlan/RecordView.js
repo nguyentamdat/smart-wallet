@@ -12,7 +12,7 @@ import {
   ButtonGroup,
   Button,
   colors,
-  ThemeProvider
+  ThemeProvider,
 } from "react-native-elements";
 //import {icon} from 'react-native-vector-icons'
 //import recordList from "./RecordList";
@@ -129,6 +129,7 @@ export default class RecordView extends Component {
     };
 
     this._onPressAdd = this._onPressAdd.bind(this);
+    this._onPressBackIcon = this._onPressBackIcon.bind(this);
     this._onPressCalendarStartDay = this._onPressCalendarStartDay.bind(this);
     this._onPressCalendarEndDay = this._onPressCalendarEndDay.bind(this);
   }
@@ -138,7 +139,6 @@ export default class RecordView extends Component {
     const infos = [];
     var newTotal = 0;
     querySnapshot.forEach(doc => {
-      //const { db_category, db_amount, db_description } = doc.data();
       infos.push({
         id: doc.id,
         category: doc.data().category,
@@ -146,7 +146,6 @@ export default class RecordView extends Component {
         description: doc.data().description
       });
       newTotal = newTotal + Number(doc.data().amount);
-      console.log("category_name: ${category_name}");
     });
 
     this.setState({
@@ -245,11 +244,48 @@ export default class RecordView extends Component {
     }
   }
 
+  _onPressBackIcon() {
+
+      // TODO_: condition for start_day < end_day
+
+      if (
+        this.state.start_day_state == null ||
+        this.state.end_day_state == null
+      ) {
+        alert("Bạn chưa nhập ngày");
+        // check firestore
+        return;
+      } else {
+        if (
+          this.state.start_day_state.timestamp >
+          this.state.end_day_state.timestamp
+        ) {
+          console.log(this.state.start_day_state);
+          console.log(this.state.end_day_state);
+          alert("start day must before end day");
+          return;
+        }
+      }
+
+      firebase
+        .firestore()
+        .collection("SPRecordList")
+        .doc(this.props.navigation.getParam("itemId", "noId"))
+        .update({
+          total: this.state.total
+        });
+
+      this.props.navigation.navigate("SPMainScreen");
+
+  }
+
   render() {
     return (
       <View style={{ flex: 1 }}>
         <Header
-          leftComponent={{ icon: "menu", color: "#fff" }}
+          leftComponent={{ 
+            icon: "chevron-left", color: "#fff", size: 30, 
+            onPress: this._onPressBackIcon}}
           centerComponent={{
             text: this.state.record_name,
             style: { color: "#fff", fontSize: 27 }
@@ -281,7 +317,8 @@ export default class RecordView extends Component {
 
         <View
           style={{
-            height: 340,
+            //height: 340,
+            flex: 1,
             marginTop: 10,
             backgroundColor: "gainsboro",
             borderColor: "black",
@@ -304,13 +341,7 @@ export default class RecordView extends Component {
             keyExtractor={(item, index) => item.id}
           />
 
-          <AddModal
-            ref={"addModal"}
-            parentFlatList={this}
-            SPRecord_id={this.props.navigation.getParam("itemId", "noId")}
-          />
-
-          <EditModal ref={"editModal"} parentFlatList={this} />
+          {/* old position of AddModal and EditModal */}
         </View>
 
         <View
@@ -339,19 +370,20 @@ export default class RecordView extends Component {
             type="outline"
             //raised
             onPress={this._onPressAdd}
-            containerStyle={{ margin: 5, borderWidth: 2, borderColor: "blue" }}
+            containerStyle={{ margin: 5, borderWidth: 2, 
+            borderColor: "blue", marginBottom: 15 }}
           />
         </View>
 
-        <View
+        {/* <View
           style={{
-            height: 60,
+            //height: 60,
             flexDirection: "row",
             justifyContent: "flex-end",
             margin: 10
           }}
-        >
-          <Button
+        > */}
+          {/* <Button
             type="outline"
             title="Thoát"
             containerStyle={{ width: 85 }}
@@ -387,8 +419,16 @@ export default class RecordView extends Component {
 
               this.props.navigation.navigate("SPMainScreen");
             }}
+          /> */}
+        {/* </View> */}
+
+        <AddModal
+            ref={"addModal"}
+            parentFlatList={this}
+            SPRecord_id={this.props.navigation.getParam("itemId", "noId")}
           />
-        </View>
+
+        <EditModal ref={"editModal"} parentFlatList={this} />
 
         <CalendarModal
           ref={"calendarModal_startDay"}
@@ -400,6 +440,7 @@ export default class RecordView extends Component {
           parentFlatList={this}
           SPRecord_id={this.props.navigation.getParam("itemId", "noId")}
         />
+
       </View>
     );
   }

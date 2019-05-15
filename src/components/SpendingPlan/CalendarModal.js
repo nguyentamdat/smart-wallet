@@ -10,6 +10,7 @@ import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
 import { Row } from 'native-base';
 import firebase from 'react-native-firebase';
 //import console = require('console');
+//import console = require('console');
 
 var screen = Dimensions.get('window');
 export default class AddModal extends Component {
@@ -35,7 +36,14 @@ export default class AddModal extends Component {
             this.setState({minStartDay: ref_recordView.state.start_day_state});
         }
         else {
-            this.setState({minStartDay: null})
+            var date = new Date().getDate();
+            if (date < 10) {date = '0' + date}
+            var month = new Date().getMonth()+1;
+            if (month < 10) {month = '0'+month};
+            var year = new Date().getFullYear();
+            minDay = year + '-' + month + '-' + date;
+            console.log({minDay});
+            this.setState({minStartDay: minDay})
         }
         this.refs.myModal.open();
     }

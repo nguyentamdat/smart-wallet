@@ -51,6 +51,7 @@ export default class AddModal extends Component {
         }}
         position="center"
         backdrop={true}
+        backdropPressToClose={false}
         onClosed={() => {
           //alert("Modal closed");
         }}

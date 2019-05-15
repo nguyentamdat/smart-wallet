@@ -30,12 +30,7 @@ export default class EditModal extends Component {
   }
   
   showEditModal = () => {
-    //this.props.parentFlatList.refs.editModal.setState({item_id: itemId});
     this.refs.myModal.open();
-    //alert('Hello '+this.state.item_id);
-  };
-  generateKey = numOfCharacters => {
-    return require("random-string")({ length: numOfCharacters });
   };
   render() {
     return (
@@ -49,7 +44,8 @@ export default class EditModal extends Component {
           height: 280
         }}
         position="center"
-        backdrop={false}
+        backdrop={true}
+        backdropPressToClose={false}
         onClosed={() => {
           //alert("Modal closed");
         }}

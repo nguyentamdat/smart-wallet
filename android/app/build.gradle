@@ -124,7 +124,9 @@ android {
     buildTypes {
         release {
             minifyEnabled enableProguardInReleaseBuilds
+            matchingFallbacks = ['release', 'debug']
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            
         }
     }
     // applicationVariants are e.g. debug, release

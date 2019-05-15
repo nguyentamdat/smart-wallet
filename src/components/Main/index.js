@@ -6,7 +6,7 @@ import { moveToBottom } from "../common";
 import AsyncStorage from "@react-native-community/async-storage";
 import { YellowBox } from "react-native";
 import firebase from "react-native-firebase";
-YellowBox.ignoreWarnings(["WebView"]);
+YellowBox.ignoreWarnings(["WebView"]); 
 
 class Main extends Component {
   constructor(props) {
