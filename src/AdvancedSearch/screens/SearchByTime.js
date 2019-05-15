@@ -46,8 +46,10 @@ export default class SearchByTime extends Component {
     }
     _showDatePicker_Start = () =>
         this.setState({ isDatePickerVisible_Start: true });
-    _hideDatePicker_Start = () =>
+    _hideDatePicker_Start = () => {
         this.setState({ isDatePickerVisible_Start: false });
+        this.props.timeStartChange(this.state.FullDate_Start);
+    };
     _handleDatePicked_Start = date => {
         this.setState({
             FullDate_Start: date,
@@ -60,8 +62,10 @@ export default class SearchByTime extends Component {
 
     _showDatePicker_End = () =>
         this.setState({ isDatePickerVisible_End: true });
-    _hideDatePicker_End = () =>
+    _hideDatePicker_End = () => {
         this.setState({ isDatePickerVisible_End: false });
+        this.props.timeEndChange(this.state.FullDate_End);
+    };
     _handleDatePicked_End = date => {
         this.setState({
             FullDate_End: date,

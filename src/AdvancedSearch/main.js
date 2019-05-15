@@ -38,8 +38,8 @@ const AppNavigator = createStackNavigator({
 const AppContainer = createAppContainer(AppNavigator);
 
 export default class AdvancedSearch extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
     }
     render() {
         return <AppContainer />;

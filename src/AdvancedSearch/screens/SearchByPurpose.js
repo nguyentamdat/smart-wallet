@@ -23,6 +23,7 @@ import {
     View
 } from "native-base";
 import styles from "../styles";
+//import console = require("console");
 
 export default class SearchByPurpose extends Component {
     constructor(props) {
@@ -41,7 +42,6 @@ export default class SearchByPurpose extends Component {
                         purpose
                     )
                 });
-                //console.log(this.state.purposesSelected);
             },
             deletePurpose: purpose => {
                 this.setState({
@@ -51,7 +51,9 @@ export default class SearchByPurpose extends Component {
                 });
             },
             purposeInList: this.state.purposesSelected,
-            isAllSelected: this.state.isAllSelected
+            isAllSelected: this.state.isAllSelected,
+            updatePurposesChosen: () =>
+                this.props.purposeChange(this.state.purposesSelected)
         });
     };
 

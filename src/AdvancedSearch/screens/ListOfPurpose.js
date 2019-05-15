@@ -187,7 +187,10 @@ export default class ListOfPurpose extends Component {
                     <Button
                         iconLeft
                         style={[styles.footerButton, { width: 165 }]}
-                        onPress={() => this.props.navigation.goBack()}
+                        onPress={() => {
+                            this.props.navigation.goBack();
+                            this.props.navigation.state.params.updatePurposesChosen();
+                        }}
                     >
                         <Icon type="Feather" name="check-circle" />
                         <Text>Xác nhận</Text>

@@ -28,17 +28,19 @@ export default class SearchByMoney extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            moneyStart: "",
             selectedStart: "vnd",
+            moneyEnd: "",
             selectedEnd: "vnd"
         };
     }
 
-    onValueChangeStart(value) {
+    onTypeChangeStart(value) {
         this.setState({
             selectedStart: value
         });
     }
-    onValueChangeEnd(value) {
+    onTypeChangeEnd(value) {
         this.setState({
             selectedEnd: value
         });
@@ -59,6 +61,11 @@ export default class SearchByMoney extends Component {
                                 style={styles.moneyInputText}
                                 placeholder="0.0"
                                 keyboardType="numeric"
+                                onChangeText={valueText => {
+                                    this.setState({ moneyStart: valueText });
+                                    this.props.moneyStartChange(valueText);
+                                }}
+                                value={this.state.moneyStart}
                             />
                         </View>
                         <View style={styles.currencyPicker}>
@@ -66,7 +73,7 @@ export default class SearchByMoney extends Component {
                                 mode="dropdown"
                                 style={{ width: 100 }}
                                 selectedValue={this.state.selectedStart}
-                                onValueChange={this.onValueChangeStart.bind(
+                                onValueChange={this.onTypeChangeStart.bind(
                                     this
                                 )}
                             >
@@ -85,6 +92,11 @@ export default class SearchByMoney extends Component {
                                 style={styles.moneyInputText}
                                 placeholder="0.0"
                                 keyboardType="numeric"
+                                onChangeText={valueText => {
+                                    this.setState({ moneyEnd: valueText });
+                                    this.props.moneyEndChange(valueText);
+                                }}
+                                value={this.state.moneyEnd}
                             />
                         </View>
                         <View style={styles.currencyPicker}>
@@ -92,7 +104,7 @@ export default class SearchByMoney extends Component {
                                 mode="dropdown"
                                 style={{ width: 100 }}
                                 selectedValue={this.state.selectedEnd}
-                                onValueChange={this.onValueChangeEnd.bind(this)}
+                                onValueChange={this.onTypeChangeEnd.bind(this)}
                             >
                                 <Picker.Item label="VND" value="key0" />
                                 <Picker.Item label="USD" value="key1" />
