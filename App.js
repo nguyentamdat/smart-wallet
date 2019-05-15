@@ -5,9 +5,8 @@ import PurposeSelect from "./src/components/Purpose";
 import Main from "./src/components/Main";
 import { Button, ThemeProvider } from "react-native-elements";
 import { createAppContainer, createStackNavigator } from "react-navigation";
-import * as firebase from "firebase";
-import "firebase/firestore";
-import MainView from "./src/components/SpendingPlan/MainView"
+import firebase from "react-native-firebase";
+import MainView from "./src/components/SpendingPlan/MainView";
 import RecordView from "./src/components/SpendingPlan/RecordView";
 import NotificationScreen from "./src/components/NotificationScreen";
 
@@ -32,13 +31,15 @@ const AppContainer = createAppContainer(navigator);
 export default class App extends Component {
   async componentWillMount() {
     try {
-      var config = {
-        apiKey: "AIzaSyChLykabtAmjvgi1rnAqWB9l2kiRXKHwaU",
-        authDomain: "srem-b062f.firebaseapp.com",
-        projectId: "srem-b062f"
-      };
-      await firebase.initializeApp(config);
-      const db = await firebase.firestore();
+      // var config = {
+      //   apiKey: "AIzaSyChLykabtAmjvgi1rnAqWB9l2kiRXKHwaU",
+      //   authDomain: "srem-b062f.firebaseapp.com",
+      //   projectId: "srem-b062f"
+      // };
+      // await firebase.initializeApp(config);
+      // const db = await firebase.firestore();
+      const initfire = firebase.app();
+      // console.log(initfire);
     } catch (e) {
       console.log(e);
     }
@@ -47,4 +48,3 @@ export default class App extends Component {
     return <AppContainer />;
   }
 }
-

@@ -3,7 +3,8 @@ import {
   View,
   DatePickerAndroid,
   TimePickerAndroid,
-  Picker
+  Picker,
+  Text
 } from "react-native";
 import {
   Header,
@@ -15,35 +16,36 @@ import {
 } from "react-native-elements";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { moveToBottom } from "../common";
+import firebase from "react-native-firebase";
+
+const initState = {
+  repeated: false,
+  amount: null,
+  purpose: "",
+  note: "",
+  date: new Date()
+};
 
 class AddTransaction extends Component {
   constructor(props) {
     super(props);
     const obj = new Date();
-    this.state = {
-      repeated: false,
-      amount: null,
-      purpose: "",
-      note: "",
-      date: {
-        year: obj.getFullYear(),
-        month: obj.getMonth(),
-        day: obj.getDate(),
-        hour: obj.getHours(),
-        minute: obj.getMinutes()
-      }
-    };
+    this.state = initState;
+    this.ref = firebase.firestore().collection("transactions");
     this.timePicker = this.timePicker.bind(this);
     this.datePicker = this.datePicker.bind(this);
+    this.submitTransaction = this.submitTransaction.bind(this);
   }
   async datePicker() {
     try {
       const { action, year, month, day } = await DatePickerAndroid.open({
-        date: new Date(),
+        date: this.state.date,
         mode: "spinner"
       });
       if (action !== DatePickerAndroid.dismissedAction) {
-        this.setState({ date: { ...this.state.date, year, month, day } });
+        const date = this.state.date;
+        date.setFullYear(year, month, day);
+        this.setState({ date: date });
       }
     } catch ({ code, message }) {
       console.warn("Cannot open date picker", message);
@@ -52,26 +54,26 @@ class AddTransaction extends Component {
   async timePicker() {
     try {
       const { action, hour, minute } = await TimePickerAndroid.open({
-        hour: this.state.date.hour,
-        minute: this.state.date.minute,
+        hour: this.state.date.getHours(),
+        minute: this.state.date.getMinutes(),
         mode: "spinner"
       });
       if (action !== TimePickerAndroid.dismissedAction) {
-        this.setState({ date: { ...this.state.date, hour, minute } });
+        const date = this.state.date;
+        date.setHours(hour, minute);
+        this.setState({ date: date });
       }
     } catch ({ code, message }) {
       console.warn("Cannot open time picker", message);
     }
   }
+  submitTransaction() {
+    const trans = ({ amount, purpose, date, repeated, note } = this.state);
+    console.log(trans);
+  }
   render() {
-    let { day, month, year, hour, minute } = this.state.date;
-    if (day < 10) day = "0" + day;
-    month = month + 1;
-    if (month < 10) month = "0" + month;
-    const dateToText = day + "/" + month + "/" + year;
-    if (hour < 10) hour = "0" + hour;
-    if (minute < 10) minute = "0" + minute;
-    const timeToText = hour + ":" + minute;
+    const dateToText = this.state.date.toLocaleDateString();
+    const timeToText = this.state.date.toLocaleTimeString();
     return (
       <View style={{ flex: 1 }}>
         <Header
@@ -93,22 +95,23 @@ class AddTransaction extends Component {
         />
         <Card>
           <Input
+            containerStyle={{ borderWidth: 0 }}
             placeholder="Số tiền"
             value={this.state.amount}
             name="amount"
-            onChangeText={amount => this.setState({ amount })}
+            onChangeText={amount => {
+              if (!isNaN(amount)) {
+                this.setState({ amount });
+              }
+            }}
             keyboardType="numeric"
             rightIcon={<Image source={{ uri: "../../public/dong.png" }} />}
           />
-          <Picker
-            selectedValue={this.state.purpose}
-            onValueChange={(ItemValue, ItemIndex) =>
-              this.setState({ purpose: ItemValue })
-            }
-          >
-            <Picker.Item label="An uong" value="anuong" />
-            <Picker.Item label="Di lai" value="dilai" />
-          </Picker>
+          <Input
+            placeholder="Mục đích"
+            value={this.state.purpose}
+            onFocus={() => this.props.navigation.navigate("Purpose")}
+          />
           <CheckBox
             title="Lặp lại"
             name="repeated"
@@ -130,7 +133,7 @@ class AddTransaction extends Component {
             value={this.state.note}
             onChangeText={note => this.setState({ note })}
           />
-          <View>
+          <View style={{ flexDirection: "row", justifyContent: "center" }}>
             <Button title={dateToText} onPress={this.datePicker} type="clear" />
             <Button title={timeToText} onPress={this.timePicker} type="clear" />
           </View>
@@ -142,6 +145,7 @@ class AddTransaction extends Component {
             onPress={() => {
               console.log(this.state);
             }}
+            disabled={!this.state.amount}
           />
         )}
       </View>
