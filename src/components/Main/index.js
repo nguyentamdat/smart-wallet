@@ -6,6 +6,8 @@ import { moveToBottom } from "../common";
 import AsyncStorage from "@react-native-community/async-storage";
 import { YellowBox } from "react-native";
 import firebase from "react-native-firebase";
+import { List, Footer, FooterTab } from "native-base";
+import TransactionScreen from "../TransactionScreen";
 YellowBox.ignoreWarnings(["WebView"]);
 
 class Main extends Component {
@@ -14,53 +16,55 @@ class Main extends Component {
   }
   render() {
     return (
-      <View style={{ flex: 1, justifyContent: "center" }}>
-        <Header
-          containerStyle={{ paddingTop: 0 }}
-          leftComponent={{
-            type: "material-community",
-            icon: "menu",
-            color: "#fff"
-          }}
-          centerComponent={{
-            text: "Màn hình chính",
-            style: { color: "#fff", fontSize: 30 }
-          }}
-          rightComponent={{
-            type: "material-community",
-            icon: "bell",
-            color: "#fff",
-            onPress: () => this.props.navigation.navigate("NotificationView")
-          }}
-        />
-        <Button
-          title="Thêm Kế Hoạch"
-          onPress={() => {
-            this.props.navigation.navigate("SPMainScreen");
-          }}
-        />
-        {moveToBottom(
-          <Button
-            icon={
-              <Icon
-                name="plus-circle"
-                size={40}
-                color="#fff"
-                onPress={() => {
-                  console.log("Pressed Button");
-                  this.props.navigation.navigate("Transaction");
-                }}
-              />
-            }
-            buttonStyle={{
-              width: 60,
-              height: 60,
-              alignSelf: "center",
-              margin: 0
-            }}
-          />
-        )}
-      </View>
+      <TransactionScreen />
+      // <View style={{ flex: 1, justifyContent: "center" }}>
+      //   <Header
+      //     containerStyle={{ paddingTop: 0 }}
+      //     leftComponent={{
+      //       type: "material-community",
+      //       icon: "menu",
+      //       color: "#fff"
+      //     }}
+      //     centerComponent={{
+      //       text: "Màn hình chính",
+      //       style: { color: "#fff", fontSize: 30 }
+      //     }}
+      //     rightComponent={{
+      //       type: "material-community",
+      //       icon: "bell",
+      //       color: "#fff",
+      //       onPress: () => this.props.navigation.navigate("NotificationView")
+      //     }}
+      //   />
+      //   <Button
+      //     title="Thêm Kế Hoạch"
+      //     onPress={() => {
+      //       this.props.navigation.navigate("SPMainScreen");
+      //     }}
+      //   />
+      //   <List />
+      //   {moveToBottom(
+      //     <Button
+      //       icon={
+      //         <Icon
+      //           name="plus-circle"
+      //           size={40}
+      //           color="#fff"
+      //           onPress={() => {
+      //             console.log("Pressed Button");
+      //             this.props.navigation.navigate("Transaction");
+      //           }}
+      //         />
+      //       }
+      //       buttonStyle={{
+      //         width: 60,
+      //         height: 60,
+      //         alignSelf: "center",
+      //         margin: 0
+      //       }}
+      //     />
+      //   )}
+      // </View>
     );
   }
 }

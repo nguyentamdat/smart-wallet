@@ -21,9 +21,10 @@ import firebase from "react-native-firebase";
 const initState = {
   repeated: false,
   amount: null,
-  purpose: "",
+  purpose: null,
   note: "",
-  date: new Date()
+  date: new Date(),
+  noti: true
 };
 
 class AddTransaction extends Component {
@@ -32,6 +33,7 @@ class AddTransaction extends Component {
     const obj = new Date();
     this.state = initState;
     this.ref = firebase.firestore().collection("transactions");
+    this.unsub = null;
     this.timePicker = this.timePicker.bind(this);
     this.datePicker = this.datePicker.bind(this);
     this.submitTransaction = this.submitTransaction.bind(this);
@@ -69,11 +71,16 @@ class AddTransaction extends Component {
   }
   submitTransaction() {
     const trans = ({ amount, purpose, date, repeated, note } = this.state);
-    console.log(trans);
+    const res = this.ref.add(trans);
+    console.log(res);
+    this.setState({ ...initState });
+    this.props.navigation.goBack();
   }
   render() {
     const dateToText = this.state.date.toLocaleDateString();
     const timeToText = this.state.date.toLocaleTimeString();
+    let purpose;
+    if (this.state.purpose) purpose = this.state.purpose.name;
     return (
       <View style={{ flex: 1 }}>
         <Header
@@ -109,8 +116,14 @@ class AddTransaction extends Component {
           />
           <Input
             placeholder="Mục đích"
-            value={this.state.purpose}
-            onFocus={() => this.props.navigation.navigate("Purpose")}
+            value={purpose}
+            onFocus={() => {
+              this.props.navigation.navigate("Purpose", {
+                selectPurpose: async purpose => {
+                  this.setState({ purpose: purpose });
+                }
+              });
+            }}
           />
           <CheckBox
             title="Lặp lại"
@@ -139,14 +152,14 @@ class AddTransaction extends Component {
           </View>
         </Card>
         {moveToBottom(
-          <Button
-            title="Lưu"
-            buttonStyle={{ alignSelf: "center", width: 100 }}
-            onPress={() => {
-              console.log(this.state);
-            }}
-            disabled={!this.state.amount}
-          />
+          <Card>
+            <Button
+              title="Lưu"
+              buttonStyle={{ alignSelf: "center", width: 100 }}
+              onPress={this.submitTransaction}
+              disabled={!this.state.amount}
+            />
+          </Card>
         )}
       </View>
     );

@@ -4,6 +4,7 @@ import { Header, Button, ListItem } from "react-native-elements";
 import firebase from "react-native-firebase";
 import AsyncStorage from "@react-native-community/async-storage";
 import { Icon } from "native-base";
+import allPurpose from "../../variables/allPurpose";
 
 class PurposeSelect extends Component {
   constructor(props) {
@@ -11,7 +12,6 @@ class PurposeSelect extends Component {
     this.state = {
       listOfPurposes: []
     };
-    this.ref = firebase.firestore().collection("purposes");
   }
   async componentWillMount() {
     try {
@@ -20,20 +20,9 @@ class PurposeSelect extends Component {
       if (savedList) {
         this.setState({ listOfPurposes: JSON.parse(savedList) });
       } else {
-        this.ref
-          .get({ source: "server" })
-          .then(querySnapshot => {
-            let list = [];
-            querySnapshot.forEach(doc => {
-              list.push(doc.data());
-            });
-            return list;
-          })
-          .then(list => {
-            console.log(list);
-            AsyncStorage.setItem("@listPurposes", JSON.stringify(list));
-            this.setState({ listOfPurposes: list });
-          });
+        let list = allPurpose;
+        AsyncStorage.setItem("@listPurposes", JSON.stringify(list));
+        this.setState({ listOfPurposes: list });
       }
     } catch (e) {
       console.log("Error: " + e);
@@ -76,7 +65,9 @@ class PurposeSelect extends Component {
                   />
                 }
                 onPress={() => {
+                  this.props.navigation.state.params.selectPurpose(purpose);
                   console.log(purpose.name);
+                  this.props.navigation.goBack();
                 }}
               />
             );
