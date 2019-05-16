@@ -1,4 +1,4 @@
-import variables from "../variables/platform";
+import variables from "../../variables/platform";
 
 export default {
     container: {
@@ -49,7 +49,8 @@ export default {
     },
     footerButton: {
         alignSelf: "center",
-        justifyContent: "center"
+        justifyContent: "center",
+        borderRadius: 5
     },
     iconListItem: {
         marginLeft: 0,

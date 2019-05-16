@@ -42,94 +42,49 @@ export default class AddModal extends Component {
     return (
       <Modal
         ref={"myModal"}
-        style={{
-          justifyContent: "center",
-          borderRadius: Platform.OS === "ios" ? 30 : 20,
-          shadowRadius: 10,
-          width: screen.width - 100,
-          height: 280
-        }}
-        position="center"
-        backdrop={true}
-        backdropPressToClose={false}
-        onClosed={() => {
-          //alert("Modal closed");
-        }}
+        style = {{ height: 300, width: screen.width - 100, alignItems: "center", justifyContent: "center", borderRadius: Platform.OS === "ios" ? 30 : 20, shadowRadius: 10 }}
+        position = "center"
+        backdrop = {true}
+        backdropPressToClose = {false}
       >
         <Text
-          style={{
-            fontSize: 16,
-            fontWeight: "bold",
-            textAlign: "center",
-            marginTop: 0
-          }}
-        >
-          Chi tiêu mới
+          style = {{ fontSize: 20, fontWeight: "bold", textAlign: "center", marginTop: 0, color: "#000" }}>
+          New expenditure
         </Text>
 
         <TextInput
-          style={{
-            height: 40,
-            borderBottomColor: "gray",
-            marginLeft: 30,
-            marginRight: 30,
-            marginTop: 10,
-            marginBottom: 10,
-            borderBottomWidth: 1
-          }}
-          onChangeText={text => this.setState({ newCategory: text })}
-          placeholder="Nhập hạng mục"
-          value={this.state.newCategory}
-        />
-
-        <TextInput
-          style={{
-            height: 40,
-            borderBottomColor: "gray",
-            marginLeft: 30,
-            marginRight: 30,
-            marginTop: 10,
-            marginBottom: 10,
-            borderBottomWidth: 1
-          }}
-          onChangeText={text => this.setState({ newAmount: text })}
+          style = {{ height: 40, width: 240, marginLeft: 30, marginRight: 30, marginTop: 5, marginBottom: 15, borderBottomWidth: 1, borderBottomColor: "#000" }}
+          onChangeText = {text => this.setState({ newAmount: text })}
           keyboardType='numeric'
-          placeholder="Nhập số tiền"
+          placeholder="Enter amount"
           value={this.state.newAmount}
         />
 
         <TextInput
-          style={{
-            height: 40,
-            borderBottomColor: "gray",
-            marginLeft: 30,
-            marginRight: 30,
-            marginTop: 10,
-            marginBottom: 10,
-            borderBottomWidth: 1
-          }}
-          onChangeText={text => this.setState({ newDescription: text })}
-          placeholder="Nhập mô tả"
-          value={this.state.newDescription}
+          style = {{ height: 40, width: 240, marginLeft: 30, marginRight: 30, marginTop: 5, marginBottom: 15, borderBottomWidth: 1, borderBottomColor: "#000" }}
+          onChangeText = {text => this.setState({ newCategory: text })}
+          placeholder="Enter purpose"
+          value={this.state.newCategory}
         />
 
+        <TextInput
+          style = {{ height: 40, width: 240, marginLeft: 30, marginRight: 30, marginTop: 5, marginBottom: 15, borderBottomWidth: 1, borderBottomColor: "#000" }}
+          onChangeText = {text => this.setState({ newAmount: text })}
+          onChangeText={text => this.setState({ newDescription: text })}
+          placeholder="Enter description"
+          value={this.state.newDescription}
+        />
+      
         <Button
-          style={{ fontSize: 18, color: "white" }}
-          containerStyle={{
-            padding: 8,
-            marginLeft: 70,
-            marginRight: 70,
-            height: 40,
-            borderRadius: 6,
-            backgroundColor: "lightgreen"
-          }}
+          style = {{ fontSize: 16, color: "white" }}
+          containerStyle = {{ padding: 8, height: 40, width: 120, borderRadius: 6, backgroundColor: "#ffa500" }}
           onPress={() => {
             if (
               this.state.newCategory.length == 0 ||
               this.state.newAmount.length == 0 ||
               this.state.newDescription.length == 0
             ) {
-              alert("Bạn chưa nhập đủ thông tin!!");
+              alert("Please enter all above information!!!");
               return;
             }
             
@@ -146,6 +101,7 @@ export default class AddModal extends Component {
         >
           Save
         </Button>
+        
       </Modal>
     );
   }

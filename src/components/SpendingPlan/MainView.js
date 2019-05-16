@@ -2,67 +2,64 @@ import React, { Component } from "react";
 import { Text, View, FlatList, Alert, TextInput } from "react-native";
 import { Button, Header, Icon } from "react-native-elements";
 import Swipeout from "react-native-swipeout";
-import AddRecordModal from "./AddRecordModal";
+
 import firebase from "react-native-firebase";
-//import console = require("console");
+
+import AddRecordModal from "./AddRecordModal";
 
 class NameItem extends Component {
   render() {
     const swipeSettings = {
       autoClose: true,
-      onClose: () => {},
+
       onOpen: () => {},
+      onClose: () => {},
+
+      sectionId: 1,
+      rowID: this.props.index,
+
       right: [
         {
+          type: "primary",
+          text: "Manage",
+          backgroundColor: "#0085ff",
           onPress: () => {
             this.props.refMainView.props.navigation.navigate('SPRecordScreen', {
-              itemId: this.props.item.id,
               item: this.props.item,
-            });
-          },
-          text: "Xem",
-          type: "primary"
+              itemId: this.props.item.id
+            })
+          }
         },
         {
+          type: "delete",
+          text: "Delete",
+          backgroundColor: "#ff0000",
           onPress: () => {
             firebase.firestore().collection('SPRecordList')
             .doc(this.props.item.id).delete();
-          },
-          text: "Xóa",
-          type: "delete"
+          }
         }
       ],
-      rowID: this.props.index,
-      sectionId: 1
+      
     };
     return (
       <Swipeout {...swipeSettings}>
-        <View
-          style={{
-            flex: 1,
-            backgroundColor:
-              this.props.index % 2 === 0 ? "gainsboro" : "lightgreen",
-            borderBottomColor: "green",
-            borderBottomWidth: 3,
-            borderLeftColor: "green",
-            borderLeftWidth: 3,
-            padding: 5,
-            marginTop: 2
-          }}
-        >
-        <Text style={{ fontSize: 15 }}>
-        Ngày bắt đầu: {this.props.item.startDay.day!=null
-        ?this.props.item.startDay.day+'-'+this.props.item.startDay.month
-        +'-'+this.props.item.startDay.year:'chưa cập nhập'}
-        </Text>
-          <Text
-            style={{
-              fontSize: 23
-            }}
-          >
+        <View style = {{ flex: 1, justifyContent: "space-around", paddingLeft: 10, paddingVertical: 5,
+          borderTopWidth:    8, borderTopColor:    "#fff",
+          borderBottomWidth: 4, borderBottomColor: "#ffa500",
+          borderLeftWidth:   8, borderLeftColor:   "#ffa500", 
+          borderRightWidth:  8, borderRightColor:  "#fff",
+          backgroundColor:                         "#fff"
+        }}>
+
+          <Text style = {{ fontSize: 20, fontWeight: "bold", color: "#000" }}>
             {this.props.item.name}
           </Text>
-          {/* <Text style={{ fontSize: 18 }}>Id: {this.props.item.id}</Text> */}
+
+          <Text style = {{ fontSize: 15, color: "#000" }}>
+            From: 
+            {this.props.item.startDay.day != null ? " " + this.props.item.startDay.day + '/' + this.props.item.startDay.month + '/' + this.props.item.startDay.year : " Not updated"}
+          </Text>
         </View>
       </Swipeout>
     );
@@ -71,6 +68,7 @@ class NameItem extends Component {
 export default class MainView extends Component {
   constructor(props) {
     super(props);
+
     this.ref = firebase.firestore().collection("SPRecordList");
 
     this.state = {
@@ -121,89 +119,60 @@ export default class MainView extends Component {
 
   render() {
     return (
-      <View style={{ flex: 1 }}>
-        {/* <View>
-          <Text
-            style={{
-              backgroundColor: "yellow",
-              fontSize: 30,
-              padding: 10,
-              borderBottomColor: "gold",
-              borderBottomWidth: 3,
-              borderLeftColor: "gold",
-              borderLeftWidth: 5
-            }}
-          >
-            Kế hoạch chi tiêu
-          </Text>
-        </View> */}
-
+      <View style = {{ flex: 1, alignContent: "center", justifyContent: "center" }}>
         <Header
-          leftComponent={{ 
+          backgroundColor = "#fff"
+
+          containerStyle = {{ flex: 1, paddingTop: 0, paddingLeft: 5, paddingRight: 5, borderBottomWidth: 4,borderBottomColor: "#ffa500" }}
+
+          leftContainerStyle = {{ flex: 1 }}
+          rightContainerStyle = {{ flex: 1 }}
+          centerContainerStyle = {{ flex: 2 }}
+
+          leftComponent = {{ 
+            type: "material-community",
             icon: "chevron-left", 
-            color: "#fff",
-            size: 30,
+            color: "#0085ff",
+            size: 33,
             onPress: this._onPressBack
-             }}
-          centerComponent={{
-            text: 'Kế hoạch chi tiêu',
-            style: { color: "#fff", fontSize: 27 }
           }}
-          rightComponent={{ icon: "home", color: "#fff" }}
+
+          rightComponent = {{
+
+          }}
+
+          centerComponent = {{
+            style: { fontSize: 24, fontWeight: "bold", color: "#0085ff" },
+            text: "Spending Plan",
+          }}
         />
 
-        <View
-          style={{
-            flex: 1,
-            marginTop: 10,
-            backgroundColor: "clightcyan",
-            borderColor: "black",
-            borderWidth: 2,
-            margin: 3
-          }}
-        >
+        <View style = {{ flex: 8, backgroundColor: "#fff" }}>
           <FlatList
-            data={this.state.record}
-            renderItem={({ item, index }) => {
+            data = { this.state.record }
+
+            renderItem = {({ item, index }) => {
               return (<NameItem 
-              item={item} 
-              index={index} 
-              refMainView={this}
+              item = { item } 
+              index = { index } 
+
+              refMainView = { this }
               />);
             }}
-            keyExtractor={(item, index) => item.id}
+
+            keyExtractor = {(item, index) => item.id}
           />
         </View>
 
-        <AddRecordModal ref={"addRecordModal"} />
+        <AddRecordModal ref = {"addRecordModal"}/>
 
-        <View style={{ marginTop: 3 }}>
+        <View style = {{ flex: 1, alignItems: "center" , alignContent: "center",  justifyContent: "space-around", borderTopWidth: 4, borderTopColor: "#ffa500" }}>
           <Button
-            title="Tạo bản ghi mới"
-            //containerStyle={{ borderWidth: 1 }}
-            containerStyle={{ margin: 5, borderWidth: 2, borderColor: "blue" }}
-            type="outline"
-            //raised
-            onPress={this._onPressAdd}
+            buttonStyle = {{ height: 40, width: 120, alignSelf: "center", backgroundColor: "#ffa500" }}
+            title = "Add"
+            titleProps = {{ fontSize: 16, color: "#fff" }}
+            onPress = { this._onPressAdd }
           />
-        </View>
-
-        <View
-          style={{
-            //height: 60,
-            flexDirection: "row",
-            justifyContent: "flex-end",
-            margin: 10
-          }}
-        >
-          {/* <Button 
-          type="outline" 
-          title="Thoát" 
-          containerStyle={{ width: 85 }} 
-          onPress={ () => {
-            this.props.navigation.navigate('Main');
-          }}
-          /> */}
         </View>
       </View>
     );

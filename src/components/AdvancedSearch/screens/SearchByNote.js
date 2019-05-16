@@ -45,6 +45,8 @@ export default class SearchByNote extends Component {
                             margin: 10,
                             marginTop: 10
                         }}
+                        value={this.props.noteContent}
+                        onChangeText={text => this.props.noteChange(text)}
                     />
                 </Form>
             </Content>

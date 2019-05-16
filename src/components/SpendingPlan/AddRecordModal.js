@@ -22,6 +22,7 @@ export default class AddRecordModal extends Component {
     };
   }
   showAddRecordModal = () => {
+    this.setState({recordName: ""});
     this.refs.currentModal.open();
   };
   generateKey = numOfCharacters => {
@@ -31,62 +32,30 @@ export default class AddRecordModal extends Component {
   render() {
     return (
       <Modal
-        ref={"currentModal"}
-        style={{
-          justifyContent: "center",
-          borderRadius: Platform.OS === "ios" ? 30 : 20,
-          shadowRadius: 10,
-          width: screen.width - 100,
-          height: 280
-        }}
-        position="center"
-        backdrop={true}
-        backdropPressToClose={false}
-        onClosed={() => {
-          //alert("Modal closed");
-        }}
+        ref = {"currentModal"}
+        style = {{ height: 200, width: screen.width - 100, alignItems: "center", justifyContent: "center", borderRadius: Platform.OS === "ios" ? 30 : 20, shadowRadius: 10 }}
+        position = "center"
+        backdrop = {true}
+        backdropPressToClose = {false}
       >
         <Text
-          style={{
-            fontSize: 16,
-            fontWeight: "bold",
-            textAlign: "center",
-            marginTop: 0
-          }}
-        >
-          Nhập tên bản ghi
+          style = {{ fontSize: 20, fontWeight: "bold", textAlign: "center", marginTop: 0, color: "#000" }}>
+          Plan name
         </Text>
 
         <TextInput
-          style={{
-            height: 40,
-            borderBottomColor: "gray",
-            marginLeft: 30,
-            marginRight: 30,
-            marginTop: 10,
-            marginBottom: 10,
-            borderBottomWidth: 1
-          }}
-          onChangeText={text => this.setState({ recordName: text })}
-          placeholder=""
-          value={this.state.recordName}
+          style = {{ height: 40, width: 240, marginLeft: 30, marginRight: 30, marginTop: 5, marginBottom: 15, borderBottomWidth: 1, borderBottomColor: "#000" }}
+          onChangeText = {text => this.setState({ recordName: text })}
         />
 
         <Button
-          style={{ fontSize: 18, color: "white" }}
-          containerStyle={{
-            padding: 8,
-            marginLeft: 70,
-            marginRight: 70,
-            height: 40,
-            borderRadius: 6,
-            backgroundColor: "lightgreen"
-          }}
+          style = {{ fontSize: 16, color: "white" }}
+          containerStyle = {{ padding: 8, height: 40, width: 120, borderRadius: 6, backgroundColor: "#ffa500" }}
           onPress={() => {
             if (
               this.state.recordName.length == 0 
             ) {
-              alert("Bạn chưa nhập tên bản ghi\nKéo xuống để Cancel");
+              alert("Please enter the plan name\nOr swipe down to dismiss");
               return;
             }
             
