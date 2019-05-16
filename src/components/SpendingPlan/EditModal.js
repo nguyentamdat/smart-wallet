@@ -24,28 +24,13 @@ export default class EditModal extends Component {
       editingCategory: "",
       editingAmount: "",
       editingDescription: "",
-      item_id: "123",
+      item_id: "",
     };
 
   }
-  // showEditModal = (editingItem, flatlistItem_para) => {
-  //     this.setState({
-  //         key: editingItem.key,
-  //         category: editingItem.category,
-  //         amount: editingItem.amount,
-  //         description: editingItem.description,
-  //         flatlistItem: flatlistItem_para,
-  //     })
-  //     this.refs.myModal.open();
-  // }
   
-  showEditModal = (itemId, flatlistItem_para) => {
-    //this.props.parentFlatList.refs.editModal.setState({item_id: itemId});
+  showEditModal = () => {
     this.refs.myModal.open();
-    //alert('Hello '+this.state.item_id);
-  };
-  generateKey = numOfCharacters => {
-    return require("random-string")({ length: numOfCharacters });
   };
   render() {
     return (
@@ -59,7 +44,8 @@ export default class EditModal extends Component {
           height: 280
         }}
         position="center"
-        backdrop={false}
+        backdrop={true}
+        backdropPressToClose={false}
         onClosed={() => {
           //alert("Modal closed");
         }}
@@ -101,6 +87,7 @@ export default class EditModal extends Component {
             borderBottomWidth: 1
           }}
           onChangeText={text => this.setState({ editingAmount: text })}
+          keyboardType='numeric'
           placeholder="Nhập số tiền"
           value={this.state.editingAmount}
         />
@@ -140,35 +127,6 @@ export default class EditModal extends Component {
               alert("Bạn chưa nhập đủ thông tin!!");
               return;
             }
-            //Update existing Food
-
-            // var foundIndex = recordList.findIndex(item => this.state.key == item.key);
-            // if (foundIndex < 0) {
-            //     return; //not found
-            // }
-            // recordList[foundIndex].category = this.state.editingCategory;
-            // recordList[foundIndex].amount = this.state.editingAmount;
-            // recordList[foundIndex].description = this.state.editingDescription;
-            
-            //alert(this.state.item_id);
-            // firebase
-            //   .firestore()
-            //   .collection("todos")
-            //   .where("uid", "==", this.state.item_id)
-            //   .get()
-            //   .then(function(querySnapshot) {
-            //     querySnapshot.forEach(function(doc) {
-            //       //console.log(doc.id, " => ", doc.data());
-            //       // Build doc ref from doc.id
-            //       firebase.firestore().collection("todos")
-            //         .doc(doc.id)
-            //         .update({ 
-            //             category: this.state.editingCategory,
-            //             amount: this.state.editingAmount,
-            //             description: 'test edit modal'
-            //             });
-            //     });
-            //   });
 
             firebase.firestore().collection('SPRecordList')
             .doc(this.props.parentFlatList.props.navigation.getParam('itemId', 'noId'))
@@ -179,8 +137,7 @@ export default class EditModal extends Component {
                 description: this.state.editingDescription
             });
 
-            //Refresh flatlist item
-            //this.state.flatlistItem.refreshFlatListItem();
+            
 
             this.refs.myModal.close();
           }}
