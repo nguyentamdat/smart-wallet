@@ -34,10 +34,11 @@ export default class AdvancedSearchScreen extends Component {
             moneyStart: 0,
             moneyEnd: 0,
             purposesChosen: [],
-            timeStart: currentDate,
-            timeEnd: currentDate,
+            timeStart: new Date(currentDate.setHours(0, 0, 0, 0)),
+            timeEnd: new Date(currentDate.setHours(23, 59, 59, 999)),
             note: "",
-            results: []
+            results: [],
+            purposeResults: []
         };
     }
     /*** Handle Data Change through Components ***/
@@ -78,8 +79,9 @@ export default class AdvancedSearchScreen extends Component {
                 console.log("Error adding document: ", error);
             });
     }
+    abc;
     /*** Search for REs */
-    _search() {
+    _search = () => {
         if (this.state.moneyStart > this.state.moneyEnd) {
             Alert.alert(
                 "Giá trị của 'Tiền bắt đầu' không được lớn hơn 'Tiền kết thúc'"
@@ -94,6 +96,7 @@ export default class AdvancedSearchScreen extends Component {
                 .where("money", ">=", this.state.moneyStart)
                 .where("money", "<=", this.state.moneyEnd)
                 .onSnapshot(
+                    { includeMetadataChanges: true },
                     querySnapshot => {
                         let moneyResults = [];
                         querySnapshot.forEach(doc => {
@@ -116,23 +119,16 @@ export default class AdvancedSearchScreen extends Component {
                         .where("purpose.id", "==", purpose.id)
                         .onSnapshot(
                             querySnapshot => {
-                                let purposeResults = [];
+                                let purposeList = this.state.purposeResults;
                                 querySnapshot.forEach(doc => {
-                                    purposeResults.push({
+                                    purposeList.push({
                                         id: doc.id,
                                         data: doc.data()
                                     });
                                 });
-
-                                let map = new Map();
-                                purposeResults.forEach(result =>
-                                    map.set(result.id, true)
-                                );
-                                purposeResults = this.state.results.filter(
-                                    result => map.has(result.id)
-                                );
-
-                                this.setState({ results: purposeResults });
+                                this.setState({
+                                    purposeResults: purposeList
+                                });
                             },
                             error => {
                                 console.log(
@@ -150,6 +146,17 @@ export default class AdvancedSearchScreen extends Component {
                 .where("time", "<=", this.state.timeEnd)
                 .onSnapshot(
                     querySnapshot => {
+                        let mapForPurpose = new Map();
+                        this.state.purposeResults.forEach(result =>
+                            mapForPurpose.set(result.id, true)
+                        );
+                        this.setState({
+                            purposeResults: [],
+                            results: this.state.results.filter(result =>
+                                mapForPurpose.has(result.id)
+                            )
+                        });
+
                         let timeResults = [];
                         querySnapshot.forEach(doc => {
                             timeResults.push({ id: doc.id, data: doc.data() });
@@ -171,7 +178,7 @@ export default class AdvancedSearchScreen extends Component {
             if (this.state.note.length > 0) {
                 this.database
                     .collection("REs")
-                    .where("note", "==", this.state.note)
+                    .where("note", "array-contains", this.state.note)
                     .onSnapshot(
                         querySnapshot => {
                             let noteResults = [];
@@ -193,14 +200,14 @@ export default class AdvancedSearchScreen extends Component {
                     );
             }
         }
-    }
+    };
     render() {
         return (
             <Container style={styles.container}>
                 <Header>
                     <Left>
                         <Button transparent>
-                            <Icon name="menu" />
+                            <Icon name="ios-arrow-back" type="Ionicons" />
                         </Button>
                     </Left>
                     <Body>

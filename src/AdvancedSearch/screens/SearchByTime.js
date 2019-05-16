@@ -52,7 +52,7 @@ export default class SearchByTime extends Component {
     };
     _handleDatePicked_Start = date => {
         this.setState({
-            FullDate_Start: date,
+            FullDate_Start: new Date(date.setHours(0, 0, 0, 0)),
             Day_Start: date.getDate(),
             Month_Start: date.getMonth() + 1,
             Year_Start: date.getFullYear()
@@ -68,7 +68,7 @@ export default class SearchByTime extends Component {
     };
     _handleDatePicked_End = date => {
         this.setState({
-            FullDate_End: date,
+            FullDate_End: new Date(date.setHours(23, 59, 59, 999)),
             Day_End: date.getDate(),
             Month_End: date.getMonth() + 1,
             Year_End: date.getFullYear()

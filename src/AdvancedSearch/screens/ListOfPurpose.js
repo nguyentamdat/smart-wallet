@@ -15,9 +15,14 @@ import {
     List,
     ListItem,
     View,
-    CheckBox
+    CheckBox,
+    Tabs,
+    Tab,
+    TabHeading
 } from "native-base";
 import AsyncStorage from "@react-native-community/async-storage";
+import ListOfExpenditurePurpose from "./ListOfPurpose_E";
+import ListOfRevenuePurpose from "./ListOfPurpose_R";
 import variables from "../../variables/allPurpose";
 import styles from "../styles";
 //import console = require("console");
@@ -28,7 +33,9 @@ export default class ListOfPurpose extends Component {
         this.state = {
             listPurpose: variables.allPurpose,
             purposeInList: [],
-            isAllSelected: false
+            isAllSelected_E: false,
+            isAllSelected_R: false,
+            tabPage: 0
         };
     }
 
@@ -42,7 +49,8 @@ export default class ListOfPurpose extends Component {
 
         this.setState({
             purposeInList: this.props.navigation.state.params.purposeInList,
-            isAllSelected: this.props.navigation.state.params.isAllSelected
+            isAllSelected_E: this.props.navigation.state.params.isAllSelected_E,
+            isAllSelected_R: this.props.navigation.state.params.isAllSelected_R
         });
     }
 
@@ -56,59 +64,133 @@ export default class ListOfPurpose extends Component {
         });
         this.setState({ listPurpose: this.state.listPurpose });
         // Add and remove
+        let purposeChosen = this.state.purposeInList;
         const purposeInListIndex = this.state.purposeInList.findIndex(
             p => p.id === purpose.id
         );
         if (purposeInListIndex > -1) {
+            purposeChosen = purposeChosen.filter(p => p.id !== purpose.id);
             this.setState({
-                purposeInList: this.state.purposeInList.filter(
-                    p => p.id !== purpose.id
-                )
+                purposeInList: purposeChosen
             });
             this.props.navigation.state.params.deletePurpose(purpose);
         } else {
+            purposeChosen = purposeChosen.concat(purpose);
             this.setState({
-                purposeInList: this.state.purposeInList.concat(purpose)
+                purposeInList: purposeChosen
             });
             this.props.navigation.state.params.addPurpose(purpose);
         }
+        // Check if All R Selected
+        let purposeChosen_E = purposeChosen.filter(
+            purpose => purpose.isRevenue === false
+        );
+        if (purposeChosen_E.length === variables.lengthPurpose_E) {
+            this.setState({ isAllSelected_E: true });
+        } else {
+            this.setState({ isAllSelected_E: false });
+        }
+        // Check if All E Selected
+        let purposeChosen_R = purposeChosen.filter(
+            purpose => purpose.isRevenue === true
+        );
+        if (purposeChosen_R.length === variables.lengthPurpose_R) {
+            this.setState({ isAllSelected_R: true });
+        } else {
+            this.setState({ isAllSelected_R: false });
+        }
     };
 
-    _handleSelectAll = () => {
-        if (this.state.isAllSelected) {
-            this.state.listPurpose.forEach(purpose => {
-                purpose.gotten = false;
-                return purpose;
-            });
-            this.setState({ listPurpose: this.state.listPurpose });
-            this.setState({ purposeInList: [] });
-            this.state.listPurpose.forEach(purpose => {
-                this.props.navigation.state.params.deletePurpose(purpose);
-            });
-        } else {
-            this.state.listPurpose.forEach(purpose => {
-                purpose.gotten = true;
-                return purpose;
-            });
-            this.setState({ listPurpose: this.state.listPurpose });
-            this.state.listPurpose.forEach(purpose => {
-                let purpose1 = this.state.purposeInList;
-                purpose1.push(purpose);
-                this.setState({
-                    purposeInList: purpose1
+    _handleSelectAll = tabPage => {
+        if (tabPage === 0) {
+            if (this.state.isAllSelected_E === false) {
+                this.state.listPurpose.forEach(p => {
+                    if (p.isRevenue === false) {
+                        p.gotten = true;
+                    }
+                    return p;
                 });
-
-                this.props.navigation.state.params.addPurpose(purpose);
-            });
-            console.log(this.state.purposeInList);
+                this.setState({
+                    listPurpose: this.state.listPurpose
+                });
+                /*** Update list */
+                let purposes = this.state.purposeInList.filter(
+                    purpose => purpose.isRevenue === true
+                );
+                purposes = purposes.concat(
+                    this.state.listPurpose.filter(
+                        purpose => purpose.isRevenue === false
+                    )
+                );
+                this.setState({
+                    purposeInList: purposes
+                });
+                this.props.navigation.state.params.selectAllPurpose_E();
+            } else {
+                this.state.listPurpose.forEach(p => {
+                    if (p.isRevenue === false) {
+                        p.gotten = false;
+                    }
+                    return p;
+                });
+                this.setState({ listPurpose: this.state.listPurpose });
+                /*** Update list */
+                this.setState({
+                    purposeInList: this.state.purposeInList.filter(
+                        purpose => purpose.isRevenue === true
+                    )
+                });
+                this.props.navigation.state.params.deselectAllPurpose_E();
+            }
+            this.setState({ isAllSelected_E: !this.state.isAllSelected_E });
+        } else {
+            if (this.state.isAllSelected_R === false) {
+                this.state.listPurpose.forEach(p => {
+                    if (p.isRevenue === true) {
+                        p.gotten = true;
+                    }
+                    return p;
+                });
+                this.setState({
+                    listPurpose: this.state.listPurpose
+                });
+                /*** Update list */
+                let purposes = this.state.purposeInList.filter(
+                    purpose => purpose.isRevenue === false
+                );
+                purposes = purposes.concat(
+                    this.state.listPurpose.filter(
+                        purpose => purpose.isRevenue === true
+                    )
+                );
+                this.setState({
+                    purposeInList: purposes
+                });
+                this.props.navigation.state.params.selectAllPurpose_R();
+            } else {
+                this.state.listPurpose.forEach(p => {
+                    if (p.isRevenue === true) {
+                        p.gotten = false;
+                    }
+                    return p;
+                });
+                this.setState({ listPurpose: this.state.listPurpose });
+                /*** Update List */
+                this.setState({
+                    purposeInList: this.state.purposeInList.filter(
+                        purpose => purpose.isRevenue === false
+                    )
+                });
+                this.props.navigation.state.params.deselectAllPurpose_R();
+            }
+            this.setState({ isAllSelected_R: !this.state.isAllSelected_R });
         }
-        this.state.isAllSelected = !this.state.isAllSelected;
     };
 
     render() {
         return (
             <Container>
-                <Header>
+                <Header hasTabs>
                     <Left>
                         <Button
                             transparent
@@ -123,66 +205,67 @@ export default class ListOfPurpose extends Component {
                         </Title>
                     </Body>
                 </Header>
+                <Tabs
+                    style={{ elevation: 3 }}
+                    onChangeTab={({ i }) => this.setState({ tabPage: i })}
+                >
+                    <Tab
+                        heading={
+                            <TabHeading>
+                                <Icon name="md-trending-down" type="Ionicons" />
+                                <Text style={{ textTransform: "uppercase" }}>
+                                    chi tiền
+                                </Text>
+                            </TabHeading>
+                        }
+                    >
+                        <ListOfExpenditurePurpose
+                            listPurpose_E={this.state.listPurpose.filter(
+                                purpose => purpose.isRevenue === false
+                            )}
+                            purposePress={this._handlePurposePress}
+                        />
+                    </Tab>
+                    <Tab
+                        heading={
+                            <TabHeading>
+                                <Icon name="md-trending-up" type="Ionicons" />
+                                <Text style={{ textTransform: "uppercase" }}>
+                                    thu tiền
+                                </Text>
+                            </TabHeading>
+                        }
+                    >
+                        <ListOfRevenuePurpose
+                            listPurpose_R={this.state.listPurpose.filter(
+                                purpose => purpose.isRevenue === true
+                            )}
+                            purposePress={this._handlePurposePress}
+                        />
+                    </Tab>
+                </Tabs>
 
-                <Content>
-                    <List>
-                        {this.state.listPurpose.map(purpose => {
-                            return (
-                                <ListItem
-                                    noIndent
-                                    key={purpose.id}
-                                    onPress={() =>
-                                        this._handlePurposePress(purpose)
-                                    }
-                                >
-                                    <View style={styles.iconListItem}>
-                                        <Button
-                                            transparent
-                                            style={{ alignSelf: "center" }}
-                                        >
-                                            <Icon
-                                                active
-                                                type={purpose.iconType}
-                                                name={purpose.iconName}
-                                            />
-                                        </Button>
-                                    </View>
-                                    <Body>
-                                        <Text
-                                            style={{
-                                                color: purpose.gotten
-                                                    ? "#bbb"
-                                                    : "#000"
-                                            }}
-                                        >
-                                            {purpose.name}
-                                        </Text>
-                                    </Body>
-                                    <Right style={{ marginRight: 15 }}>
-                                        <CheckBox
-                                            checked={purpose.gotten}
-                                            onPress={() =>
-                                                this._handlePurposePress(
-                                                    purpose
-                                                )
-                                            }
-                                        />
-                                    </Right>
-                                </ListItem>
-                            );
-                        })}
-                    </List>
-                </Content>
-
-                <View style={styles.footer}>
+                <Footer style={styles.footer}>
                     <Button
                         iconLeft
                         style={[styles.footerButton, { width: 165 }]}
-                        onPress={() => this._handleSelectAll()}
+                        onPress={() =>
+                            this._handleSelectAll(this.state.tabPage)
+                        }
                     >
                         <Icon type="MaterialCommunityIcons" name="select-all" />
-                        {!this.state.isAllSelected && <Text>Chọn tất cả</Text>}
-                        {this.state.isAllSelected && <Text>Bỏ chọn</Text>}
+                        {((!this.state.isAllSelected_E &&
+                            this.state.tabPage === 0) ||
+                            (!this.state.isAllSelected_R &&
+                                this.state.tabPage === 1)) && (
+                            <Text>Chọn tất cả</Text>
+                        )}
+                        {((this.state.isAllSelected_E &&
+                            this.state.tabPage === 0) ||
+                            (this.state.isAllSelected_R &&
+                                this.state.tabPage === 1)) && (
+                            <Text>Chọn tất cả</Text>
+                        )}
                     </Button>
                     <Button
                         iconLeft
@@ -195,7 +278,7 @@ export default class ListOfPurpose extends Component {
                         <Icon type="Feather" name="check-circle" />
                         <Text>Xác nhận</Text>
                     </Button>
-                </View>
+                </Footer>
             </Container>
         );
     }
