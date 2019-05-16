@@ -31,7 +31,7 @@ export default class ListOfPurpose extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isSingleSelect: this.props.navigation.state.params.isSingleSelect,
+            isSingleSelect: false,
             listPurpose: variables.allPurpose,
             purposeInList: [],
             isAllSelected_E: false,
@@ -49,6 +49,7 @@ export default class ListOfPurpose extends Component {
         }
 
         this.setState({
+            isSingleSelect: this.props.navigation.state.params.isSingleSelect,
             purposeInList: this.props.navigation.state.params.purposeInList,
             isAllSelected_E: this.props.navigation.state.params.isAllSelected_E,
             isAllSelected_R: this.props.navigation.state.params.isAllSelected_R
@@ -287,7 +288,10 @@ export default class ListOfPurpose extends Component {
                                 this.props.navigation.state.params.updatePurposesChosen();
                             }}
                         >
-                            <Icon type="Feather" name="check-circle" />
+                            <Icon
+                                type="MaterialCommunityIcons"
+                                name="checkbox-marked-circle-outline"
+                            />
                             <Text>Xác nhận</Text>
                         </Button>
                     </Footer>

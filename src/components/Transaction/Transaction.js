@@ -6,18 +6,23 @@ import {
     Picker,
     Text
 } from "react-native";
+import { Card, Input, CheckBox, Image } from "react-native-elements";
 import {
+    Container,
+    Content,
+    ListItem,
+    Body,
+    Left,
+    Right,
     Header,
-    Card,
-    Input,
-    CheckBox,
-    Button,
-    Image
-} from "react-native-elements";
-import { ListItem, Body, Right } from "native-base";
+    Title,
+    Footer,
+    Button
+} from "native-base";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { moveToBottom } from "../common";
 import firebase from "react-native-firebase";
+import styles from "../AdvancedSearch/styles";
 
 const initState = {
     repeated: false,
@@ -83,58 +88,90 @@ class AddTransaction extends Component {
         let purpose;
         if (this.state.purpose) purpose = this.state.purpose.name;
         return (
-            <View style={{ flex: 1 }}>
-                <Header
+            <Container>
+                {/* <Header
                     containerStyle={{ paddingTop: 0 }}
-                    leftComponent={{
-                        type: "ionicon",
-                        icon: "ios-arrow-back",
-                        color: "#fff"
-                    }}
+                    // leftComponent={{
+                    //     type: "ionicon",
+                    //     icon: "ios-arrow-back",
+                    //     color: "#fff"
+                    // }}
                     centerComponent={{
-                        text: "Chi tiêu",
-                        style: { color: "#fff", fontSize: 30 }
-                    }}
-                    rightComponent={{
-                        type: "material-community",
-                        icon: "bell",
-                        color: "#fff"
-                    }}
-                />
-                <Card>
-                    <Input
-                        containerStyle={{ borderWidth: 0 }}
-                        placeholder="Số tiền"
-                        value={this.state.amount}
-                        name="amount"
-                        onChangeText={amount => {
-                            if (!isNaN(amount)) {
-                                this.setState({ amount });
-                            }
-                        }}
-                        keyboardType="numeric"
-                        rightIcon={
-                            <Image source={{ uri: "../../public/dong.png" }} />
+                        text: "Ghi khoản",
+                        style: {
+                            color: "#fff",
+                            fontSize: 25,
+                            textTransform: "uppercase"
                         }
-                    />
-                    <ListItem
-                        noIndent
-                        onPress={() => {
-                            this.props.navigation.navigate("PurposeSelect", {
-                                isSingleSelect: true,
-                                selectPurpose: async purpose => {
-                                    this.setState({ purpose: purpose });
-                                }
-                            });
-                        }}
-                    >
+                    }}
+                    // rightComponent={{
+                    //     type: "material-community",
+                    //     icon: "bell",
+                    //     color: "#fff"
+                    // }}
+                /> */}
+                <Header>
+                    <Left>
+                        <Button
+                            transparent
+                            onPress={() =>
+                                this.props.navigation.navigate("AdvancedSearch")
+                            }
+                        >
+                            <Icon
+                                name="crop-free"
+                                size={25}
+                                style={{ color: "#fff" }}
+                            />
+                        </Button>
+                    </Left>
+                    <Body style={{ flex: 1 }}>
+                        <Title style={{ textTransform: "uppercase" }}>
+                            Ghi khoản thu/chi
+                        </Title>
+                    </Body>
+                </Header>
+
+                <Content>
+                    <Card>
                         <Input
-                            editable={false}
-                            placeholder="Mục đích"
-                            value={purpose}
+                            containerStyle={{ borderWidth: 0 }}
+                            placeholder="Số tiền"
+                            value={this.state.amount}
+                            name="amount"
+                            onChangeText={amount => {
+                                if (!isNaN(amount)) {
+                                    this.setState({ amount });
+                                }
+                            }}
+                            keyboardType="numeric"
+                            rightIcon={
+                                <Image
+                                    source={{ uri: "../../public/dong.png" }}
+                                />
+                            }
                         />
-                    </ListItem>
-                    {/* <Input
+                        <ListItem
+                            noIndent
+                            onPress={() => {
+                                this.props.navigation.navigate(
+                                    "PurposeSelect",
+                                    {
+                                        isSingleSelect: true,
+                                        selectPurpose: async purpose => {
+                                            this.setState({ purpose: purpose });
+                                        }
+                                    }
+                                );
+                            }}
+                        >
+                            <Input
+                                editable={false}
+                                placeholder="Mục đích"
+                                value={purpose}
+                            />
+                        </ListItem>
+                        {/* <Input
                         editable={false}
                         placeholder="Mục đích"
                         value={purpose}
@@ -147,58 +184,81 @@ class AddTransaction extends Component {
                             });
                         }}
                     /> */}
-                    <CheckBox
-                        title="Lặp lại"
-                        name="repeated"
-                        checked={this.state.repeated}
-                        onPress={() =>
-                            this.setState({ repeated: !this.state.repeated })
-                        }
-                        checkedIcon="dot-circle-o"
-                        uncheckedIcon="circle-o"
-                        iconRight
-                        containerStyle={{
-                            backgroundColor: "#FFF",
-                            borderWidth: 0,
-                            borderBottomWidth: 1,
-                            borderColor: "grey"
-                        }}
-                    />
-                    <Input
-                        placeholder="Ghi chú"
-                        name="note"
-                        value={this.state.note}
-                        onChangeText={note => this.setState({ note })}
-                    />
-                    <View
-                        style={{
-                            flexDirection: "row",
-                            justifyContent: "center"
-                        }}
-                    >
-                        <Button
-                            title={dateToText}
-                            onPress={this.datePicker}
-                            type="clear"
+                        <CheckBox
+                            title="Lặp lại"
+                            name="repeated"
+                            checked={this.state.repeated}
+                            onPress={() =>
+                                this.setState({
+                                    repeated: !this.state.repeated
+                                })
+                            }
+                            checkedIcon="dot-circle-o"
+                            uncheckedIcon="circle-o"
+                            iconRight
+                            containerStyle={{
+                                backgroundColor: "#FFF",
+                                borderWidth: 0,
+                                borderBottomWidth: 1,
+                                borderColor: "grey"
+                            }}
                         />
-                        <Button
-                            title={timeToText}
-                            onPress={this.timePicker}
-                            type="clear"
+                        <Input
+                            placeholder="Ghi chú"
+                            name="note"
+                            value={this.state.note}
+                            onChangeText={note => this.setState({ note })}
                         />
-                    </View>
-                </Card>
-                {moveToBottom(
-                    <Card>
-                        <Button
-                            title="Lưu"
-                            buttonStyle={{ alignSelf: "center", width: 100 }}
-                            onPress={this.submitTransaction}
-                            disabled={!this.state.amount}
-                        />
+                        <View
+                            style={{
+                                flexDirection: "row",
+                                justifyContent: "center"
+                            }}
+                        >
+                            <Button
+                                title={dateToText}
+                                onPress={this.datePicker}
+                                type="clear"
+                            />
+                            <Button
+                                title={timeToText}
+                                onPress={this.timePicker}
+                                type="clear"
+                            />
+                        </View>
                     </Card>
-                )}
-            </View>
+                </Content>
+                <Footer
+                    style={[
+                        styles.footer,
+                        {
+                            justifyContent: "center"
+                        }
+                    ]}
+                >
+                    <Button
+                        iconLeft
+                        style={[styles.footerButton, { width: 225 }]}
+                        onPress={this.submitTransaction}
+                        disabled={!this.state.amount}
+                    >
+                        <Icon
+                            name="content-save"
+                            size={25}
+                            style={{ color: "#fff" }}
+                        />
+                        <Text
+                            style={{
+                                fontSize: 20,
+                                color: "#fff",
+                                marginLeft: 10
+                            }}
+                        >
+                            Lưu
+                        </Text>
+                    </Button>
+                </Footer>
+            </Container>
         );
     }
 }

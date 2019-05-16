@@ -1,40 +1,20 @@
 import React, { Component } from "react";
 import { Platform, StyleSheet, Text, View, StatusBar } from "react-native";
 import { Button, ThemeProvider } from "react-native-elements";
-import { createAppContainer, createStackNavigator } from "react-navigation";
+import { createStackNavigator, createAppContainer } from "react-navigation";
 import firebase from "react-native-firebase";
 //*** Components Screens ***/
 import Main from "./src/components/Main/Main";
-import AddTransaction from "./src/components/Transaction/Transaction";
 import ListOfPurpose from "./src/components/PurposeSelectScreen/ListOfPurpose";
 import AdvancedSearchScreen from "./src/components/AdvancedSearch/screens/AdvancedSearch";
-import MainView from "./src/components/SpendingPlan/MainView";
 import RecordView from "./src/components/SpendingPlan/RecordView";
 import NotificationScreen from "./src/components/NotificationScreen";
 
 const navigator = createStackNavigator(
     {
-        Main: Main,
-        Transaction: AddTransaction,
-        PurposeSelect: {
-            screen: ListOfPurpose,
-            navigationOptions: ({ navigation }) => ({
-                header: null
-            })
-        },
-        AdvancedSearch: {
-            screen: AdvancedSearchScreen,
-            navigationOptions: ({ navigation }) => ({
-                header: null
-            })
-        },
-        SPMainScreen: MainView,
-        SPRecordScreen: RecordView,
-        NotificationView: NotificationScreen
+        Main: Main
     },
     {
-        initialRouteName: "Main",
-        defaultNavigationOptions: {},
         headerMode: "none"
     }
 );

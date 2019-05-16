@@ -169,10 +169,7 @@ export default class SearchByPurpose extends Component {
                                     {purpose.isRevenue === true ? (
                                         <Button
                                             transparent
-                                            style={{
-                                                alignSelf: "center",
-                                                color: "#00cc44"
-                                            }}
+                                            style={{ alignSelf: "center" }}
                                         >
                                             <Icon
                                                 name="md-trending-up"

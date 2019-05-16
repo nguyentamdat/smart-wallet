@@ -85,141 +85,23 @@ export default class AdvancedSearchScreen extends Component {
         this.setState({ note: content });
     };
     /*** Add RE to database ***/
-    _addRE() {
-        this.database
-            .collection("transactions")
-            .add({
-                money: parseFloat(this.state.moneyStart),
-                purpose: this.state.purposesChosen[0],
-                time: this.state.timeStart,
-                note: this.state.note
-            })
-            .catch(error => {
-                console.log("Error adding document: ", error);
-            });
+    // _addRE() {
+    //     this.database
+    //         .collection("transactions")
+    //         .add({
+    //             money: parseFloat(this.state.moneyStart),
+    //             purpose: this.state.purposesChosen[0],
+    //             time: this.state.timeStart,
+    //             note: this.state.note
+    //         })
+    //         .catch(error => {
+    //             console.log("Error adding document: ", error);
+    //         });
+    // }
+
+    componentDidMount() {
+        this.setState({ results: this.state.results });
     }
-    abc;
-    /*** Search for REs */
-    _search = () => {
-        if (this.state.moneyStart > this.state.moneyEnd) {
-            Alert.alert(
-                "Giá trị của 'Tiền bắt đầu' không được lớn hơn 'Tiền kết thúc'"
-            );
-        } else if (this.state.timeStart > this.state.timeEnd) {
-            Alert.alert(
-                "'Thời gian bắt đầu' không được lớn hơn 'Thời gian kết thúc'"
-            );
-        } else {
-            this.database
-                .collection("transactions")
-                .where("amount", ">=", this.state.moneyStart)
-                .where("amount", "<=", this.state.moneyEnd)
-                .onSnapshot(
-                    { includeMetadataChanges: true },
-                    querySnapshot => {
-                        let moneyResults = [];
-                        querySnapshot.forEach(doc => {
-                            moneyResults.push({ id: doc.id, data: doc.data() });
-                        });
-
-                        this.setState({
-                            results: moneyResults
-                        });
-                    },
-                    error => {
-                        console.log("Error getting moneyResults: ", error);
-                    }
-                );
-
-            if (this.state.purposesChosen.length > 0) {
-                this.state.purposesChosen.forEach(purpose => {
-                    this.database
-                        .collection("transactions")
-                        .where("purpose.id", "==", purpose.id)
-                        .onSnapshot(
-                            querySnapshot => {
-                                let purposeList = this.state.purposeResults;
-                                querySnapshot.forEach(doc => {
-                                    purposeList.push({
-                                        id: doc.id,
-                                        data: doc.data()
-                                    });
-                                });
-                                this.setState({
-                                    purposeResults: purposeList
-                                });
-                            },
-                            error => {
-                                console.log(
-                                    "Error getting purposeResults: ",
-                                    error
-                                );
-                            }
-                        );
-                });
-            }
-
-            this.database
-                .collection("transactions")
-                .where("date", ">=", this.state.timeStart)
-                .where("date", "<=", this.state.timeEnd)
-                .onSnapshot(
-                    querySnapshot => {
-                        let mapForPurpose = new Map();
-                        this.state.purposeResults.forEach(result =>
-                            mapForPurpose.set(result.id, true)
-                        );
-                        this.setState({
-                            purposeResults: [],
-                            results: this.state.results.filter(result =>
-                                mapForPurpose.has(result.id)
-                            )
-                        });
-
-                        let timeResults = [];
-                        querySnapshot.forEach(doc => {
-                            timeResults.push({ id: doc.id, data: doc.data() });
-                        });
-
-                        let map = new Map();
-                        timeResults.forEach(result => map.set(result.id, true));
-                        timeResults = this.state.results.filter(result =>
-                            map.has(result.id)
-                        );
-
-                        this.setState({ results: timeResults });
-                    },
-                    error => {
-                        console.log("Error getting timeResults: ", error);
-                    }
-                );
-
-            if (this.state.note.length > 0) {
-                this.database
-                    .collection("transactions")
-                    .where("note", "array-contains", this.state.note)
-                    .onSnapshot(
-                        querySnapshot => {
-                            let noteResults = [];
-                            querySnapshot.forEach(doc => {
-                                noteResults.add(doc);
-                            });
-
-                            let map = new Map();
-                            noteResults.forEach(result => map.set(result.id));
-                            noteResults = this.state.results.filter(result =>
-                                map.has(result.id)
-                            );
-
-                            this.setState({ results: noteResults });
-                        },
-                        error => {
-                            console.log("Error getting noteResults: ", error);
-                        }
-                    );
-            }
-        }
-    };
 
     render() {
         return (
@@ -279,8 +161,29 @@ export default class AdvancedSearchScreen extends Component {
                     </Button> */}
                     <Button
                         iconLeft
-                        style={[styles.footerButton, { width: 275 }]}
-                        onPress={() => this._search()}
+                        style={[styles.footerButton, { width: 225 }]}
+                        onPress={() => {
+                            if (this.state.moneyStart > this.state.moneyEnd) {
+                                Alert.alert(
+                                    "Giá trị của 'Tiền bắt đầu' không được lớn hơn 'Tiền kết thúc'"
+                                );
+                            } else if (
+                                this.state.timeStart > this.state.timeEnd
+                            ) {
+                                Alert.alert(
+                                    "'Thời gian bắt đầu' không được lớn hơn 'Thời gian kết thúc'"
+                                );
+                            } else {
+                                this.props.navigation.navigate("SearchResult", {
+                                    moneyStart: this.state.moneyStart,
+                                    moneyEnd: this.state.moneyEnd,
+                                    purposesChosen: this.state.purposesChosen,
+                                    timeStart: this.state.timeStart,
+                                    timeEnd: this.state.timeEnd,
+                                    note: this.state.note
+                                });
+                            }
+                        }}
                     >
                         <Icon type="AntDesign" name="search1" />
                         <Text>Tìm kiếm</Text>

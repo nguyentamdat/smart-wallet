@@ -20,7 +20,8 @@ import {
     Footer,
     FooterTab,
     Button,
-    H1
+    H1,
+    Title
 } from "native-base";
 import firebase from "react-native-firebase";
 
@@ -38,7 +39,6 @@ class TransactionScreen extends Component {
         this.onConnect = this.onConnect.bind(this);
     }
     componentDidMount() {
-        console.log("comp mounted");
         this.unsubcribe = this.ref.onSnapshot(this.onConnect);
     }
     componentWillUnmount() {
@@ -69,24 +69,57 @@ class TransactionScreen extends Component {
         else
             return (
                 <Container>
-                    {/* <Header>
-                        <Body>
-                            <H1>{this.state.total}</H1>
+                    <Header>
+                        <Left style={{ flex: 1 }}>
+                            <Button
+                                transparent
+                                onPress={() =>
+                                    this.props.navigation.navigate(
+                                        "AdvancedSearch"
+                                    )
+                                }
+                            >
+                                <Icon type="AntDesign" name="search1" />
+                            </Button>
+                        </Left>
+                        <Body style={{ flex: 1 }}>
+                            <Title
+                                style={{
+                                    textTransform: "uppercase",
+                                    alignSelf: "center"
+                                }}
+                            >
+                                Tổng quan
+                            </Title>
                         </Body>
-                        <Right>
-                            <Icon name="bell" type="MaterialCommunityIcons" />
+                        <Right style={{ flex: 1 }}>
+                            <Button
+                                transparent
+                                onPress={() =>
+                                    this.props.navigation.navigate(
+                                        "NotificationView"
+                                    )
+                                }
+                            >
+                                <Icon
+                                    name="bell"
+                                    type="MaterialCommunityIcons"
+                                />
+                            </Button>
                         </Right>
-                    </Header> */}
+                    </Header>
 
                     <Content>
-                        <Button full disabled>
-                            <H1>{this.state.total}</H1>
-                        </Button>
                         {this.state.listTrans.map(x => {
                             const date = x.date.toDate();
                             return (
                                 <ListItem key={x.key}>
-                                    <Left style={{ flexDirection: "row" }}>
+                                    <Left
+                                        style={{
+                                            flexDirection: "row",
+                                            flex: 1
+                                        }}
+                                    >
                                         <Grid>
                                             <Row style={{ height: 20 }}>
                                                 <H3 style={{ color: "blue" }}>
@@ -98,7 +131,7 @@ class TransactionScreen extends Component {
                                             </Row>
                                         </Grid>
                                     </Left>
-                                    <Right>
+                                    <Right style={{ flex: 1 }}>
                                         <Text>
                                             {date.toLocaleDateString() +
                                                 "\n" +
@@ -109,7 +142,7 @@ class TransactionScreen extends Component {
                             );
                         })}
                     </Content>
-                    <Footer>
+                    {/* <Footer>
                         <FooterTab>
                             <Button
                                 onPress={() => {
@@ -121,7 +154,7 @@ class TransactionScreen extends Component {
                                 <Text>+</Text>
                             </Button>
                         </FooterTab>
-                    </Footer>
+                    </Footer> */}
                 </Container>
             );
     }
