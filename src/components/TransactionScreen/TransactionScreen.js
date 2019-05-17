@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import {
+  View,
   Container,
   Header,
   Body,
@@ -24,6 +25,7 @@ import {
   Title
 } from "native-base";
 import firebase from "react-native-firebase";
+import styles from "../AdvancedSearch/styles";
 
 let initState = { listTrans: [], loading: true, wallet: null };
 
@@ -80,12 +82,13 @@ class TransactionScreen extends Component {
                 <Icon type="AntDesign" name="search1" />
               </Button>
             </Left>
-            <Body style={{ flex: 3 }}>
+            <Body style={{ flex: 4 }}>
               <Title
                 style={{
                   textTransform: "uppercase",
+                  fontSize: 26,
                   alignSelf: "center",
-                  color: this.state.wallet >= 0 ? "#00cc44" : "#e60000"
+                  color: this.state.wallet >= 0 ? "#00ff55" : "#ff6666"
                 }}
               >
                 {this.state.wallet}
@@ -93,13 +96,18 @@ class TransactionScreen extends Component {
             </Body>
             <Right style={{ flex: 1 }}>
               {/* <Button
-                transparent
-                onPress={() =>
-                  this.props.navigation.navigate("NotificationView")
-                }
-              >
-                <Icon name="bell" type="MaterialCommunityIcons" />
-              </Button> */}
+                                transparent
+                                onPress={() =>
+                                    this.props.navigation.navigate(
+                                        "NotificationView"
+                                    )
+                                }
+                            >
+                                <Icon
+                                    name="bell"
+                                    type="MaterialCommunityIcons"
+                                />
+                            </Button> */}
             </Right>
           </Header>
 
@@ -108,6 +116,15 @@ class TransactionScreen extends Component {
               const date = x.date.toDate();
               return (
                 <ListItem key={x.key} noIndent>
+                  <View style={styles.iconListItem}>
+                    <Button transparent style={{ alignSelf: "center" }}>
+                      <Icon
+                        active
+                        type={x.purpose.iconType}
+                        name={x.purpose.iconName}
+                      />
+                    </Button>
+                  </View>
                   <Body
                     style={{
                       flexDirection: "column",
@@ -126,29 +143,13 @@ class TransactionScreen extends Component {
                     <Text>{x.purpose.name}</Text>
                   </Body>
                   <Right style={{ flex: 1 }}>
-                    <Text>
-                      {date.toLocaleDateString() +
-                        "\n" +
-                        date.toLocaleTimeString()}
-                    </Text>
+                    <Text>{date.toLocaleDateString()}</Text>
+                    <Text>{date.toLocaleTimeString()}</Text>
                   </Right>
                 </ListItem>
               );
             })}
           </Content>
-          {/* <Footer>
-                        <FooterTab>
-                            <Button
-                                onPress={() => {
-                                    this.props.navigation.navigate(
-                                        "AddTransaction"
-                                    );
-                                }}
-                            >
-                                <Text>+</Text>
-                            </Button>
-                        </FooterTab>
-                    </Footer> */}
         </Container>
       );
   }

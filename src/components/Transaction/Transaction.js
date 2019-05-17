@@ -3,8 +3,7 @@ import {
   View,
   DatePickerAndroid,
   TimePickerAndroid,
-  Picker,
-  Text
+  Picker
 } from "react-native";
 import { Card, Input, CheckBox, Image } from "react-native-elements";
 import {
@@ -17,7 +16,8 @@ import {
   Header,
   Title,
   Footer,
-  Button
+  Button,
+  Text
 } from "native-base";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { moveToBottom } from "../common";
@@ -199,16 +199,19 @@ class AddTransaction extends Component {
                 justifyContent: "center"
               }}
             >
-              <Button
-                title={dateToText}
-                onPress={this.datePicker}
-                type="clear"
-              />
-              <Button
-                title={timeToText}
-                onPress={this.timePicker}
-                type="clear"
-              />
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between"
+                }}
+              >
+                <Button onPress={this.datePicker} transparent>
+                  <Text>{dateToText}</Text>
+                </Button>
+                <Button onPress={this.timePicker} transparent>
+                  <Text>{timeToText}</Text>
+                </Button>
+              </View>
             </View>
           </Card>
         </Content>
