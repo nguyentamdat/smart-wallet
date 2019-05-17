@@ -30,6 +30,11 @@ export default class EditModal extends Component {
   }
   
   showEditModal = () => {
+    this.setState({
+      editingCategory: "",
+      editingAmount: "",
+      editingDescription: ""
+    })
     this.refs.myModal.open();
   };
   render() {
@@ -52,29 +57,15 @@ export default class EditModal extends Component {
       >
         <Text
           style={{
-            fontSize: 16,
+            fontSize: 20,
             fontWeight: "bold",
             textAlign: "center",
-            marginTop: 0
+            marginTop: 0,
+            color: "#000"
           }}
         >
-          Chỉnh sửa chi tiêu
+          Edit expenditure
         </Text>
-
-        <TextInput
-          style={{
-            height: 40,
-            borderBottomColor: "gray",
-            marginLeft: 30,
-            marginRight: 30,
-            marginTop: 10,
-            marginBottom: 10,
-            borderBottomWidth: 1
-          }}
-          onChangeText={text => this.setState({ editingCategory: text })}
-          placeholder="Nhập hạng mục"
-          value={this.state.editingCategory}
-        />
 
         <TextInput
           style={{
@@ -88,7 +79,7 @@ export default class EditModal extends Component {
           }}
           onChangeText={text => this.setState({ editingAmount: text })}
           keyboardType='numeric'
-          placeholder="Nhập số tiền"
+          placeholder="Enter amount"
           value={this.state.editingAmount}
         />
 
@@ -102,8 +93,23 @@ export default class EditModal extends Component {
             marginBottom: 10,
             borderBottomWidth: 1
           }}
+          onChangeText={text => this.setState({ editingCategory: text })}
+          placeholder="Enter purpose"
+          value={this.state.editingCategory}
+        />
+
+        <TextInput
+          style={{
+            height: 40,
+            borderBottomColor: "gray",
+            marginLeft: 30,
+            marginRight: 30,
+            marginTop: 10,
+            marginBottom: 10,
+            borderBottomWidth: 1
+          }}
           onChangeText={text => this.setState({ editingDescription: text })}
-          placeholder="Nhập mô tả"
+          placeholder="Enter description"
           value={this.state.editingDescription}
         />
 
@@ -124,7 +130,7 @@ export default class EditModal extends Component {
               this.state.editingAmount.length == 0 ||
               this.state.editingDescription.length == 0
             ) {
-              alert("Bạn chưa nhập đủ thông tin!!");
+              alert("Please enter all above information!!!\nOr swipe down to dismiss");
               return;
             }
 

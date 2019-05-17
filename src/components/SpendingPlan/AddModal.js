@@ -32,6 +32,11 @@ export default class AddModal extends Component {
     };
   }
   showAddModal = () => {
+    this.setState({
+      newCategory: "",
+      newAmount: "",
+      newDescription: ""
+    });
     this.refs.myModal.open();
   };
   generateKey = numOfCharacters => {
@@ -57,22 +62,22 @@ export default class AddModal extends Component {
           onChangeText = {text => this.setState({ newAmount: text })}
           keyboardType='numeric'
           placeholder="Enter amount"
-          value={this.state.newAmount}
+          //value={this.state.newAmount}
         />
 
         <TextInput
           style = {{ height: 40, width: 240, marginLeft: 30, marginRight: 30, marginTop: 5, marginBottom: 15, borderBottomWidth: 1, borderBottomColor: "#000" }}
           onChangeText = {text => this.setState({ newCategory: text })}
           placeholder="Enter purpose"
-          value={this.state.newCategory}
+          //value={this.state.newCategory}
         />
 
         <TextInput
           style = {{ height: 40, width: 240, marginLeft: 30, marginRight: 30, marginTop: 5, marginBottom: 15, borderBottomWidth: 1, borderBottomColor: "#000" }}
-          onChangeText = {text => this.setState({ newAmount: text })}
-          onChangeText={text => this.setState({ newDescription: text })}
+          //onChangeText = {text => this.setState({ newAmount: text })}
+          onChangeText = {text => this.setState({ newDescription: text })}
           placeholder="Enter description"
-          value={this.state.newDescription}
+          //value={this.state.newDescription}
         />
       
         <Button
@@ -84,7 +89,7 @@ export default class AddModal extends Component {
               this.state.newAmount.length == 0 ||
               this.state.newDescription.length == 0
             ) {
-              alert("Please enter all above information!!!");
+              alert("Please enter all above information!!!\nOr swipe down to dismiss");
               return;
             }
             
