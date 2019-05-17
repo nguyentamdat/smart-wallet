@@ -51,7 +51,7 @@ class FirestoreItem extends Component {
             });
             this.props.parentFlatList.refs.editModal.showEditModal();
           },
-          text: "Chỉnh sửa",
+          text: "Edit",
           type: "primary"
         },
         {
@@ -67,7 +67,7 @@ class FirestoreItem extends Component {
               .delete();
             //alert('Press Remove button')
           },
-          text: "Xóa",
+          text: "Delete",
           type: "delete"
         }
       ],
@@ -85,19 +85,19 @@ class FirestoreItem extends Component {
             padding: 3,
             marginLeft: 1,
             marginTop: 2,
-            backgroundColor: "lavenderblush"
+            backgroundColor: "#ffffe6"
           }}
         >
-          <Text style={{ fontSize: 18 }}>
-            Hạng mục: {this.props.item.category}
+          <Text style={{ fontSize: 23, fontWeight: "bold", color: "#e65c00" }}>
+            Purpose:   {this.props.item.category}
           </Text>
           <Text style={{ fontSize: 18 }}>
-            Mô tả: {this.props.item.description}
+            Description:   {this.props.item.description}
           </Text>
-          <Text style={{ fontSize: 18 }}>
-            Số tiền: {this.props.item.amount}
+          <Text style={{ fontSize: 21, color: "#00b300" }}>
+            Amount:              {this.props.item.amount}
           </Text>
-          <Text style={{ fontSize: 18 }}>Id: {this.props.item.id}</Text>
+          {/* <Text style={{ fontSize: 18 }}>Id: {this.props.item.id}</Text> */}
         </View>
       </Swipeout>
     );
@@ -124,8 +124,6 @@ export default class RecordView extends Component {
       // for header
       record_name: ""
 
-      // calculate total
-      //total: 16,
     };
 
     this._onPressAdd = this._onPressAdd.bind(this);
@@ -149,10 +147,11 @@ export default class RecordView extends Component {
     });
 
     this.setState({
-      SPInfoList: infos,
+      SPInfoList: infos.sort((a,b) => {return Number(a.amount) > Number(b.amount)}),
       loading: false,
       total: newTotal
     });
+    console.log(this.state.SPInfoList);
   };
 
   componentDidMount() {
