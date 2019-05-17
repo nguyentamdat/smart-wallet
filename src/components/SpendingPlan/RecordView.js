@@ -238,7 +238,7 @@ export default class RecordView extends Component {
   }
   _onPressCalendarEndDay() {
     if (this.state.start_day_text == "Start day") {
-      return alert("Vui lòng nhập ngày bắt đầu trước");
+      return alert("Please enter start day first");
     } else {
       this.refs.calendarModal_endDay.showCalendarModal(this, "end");
     }
@@ -252,7 +252,7 @@ export default class RecordView extends Component {
         this.state.start_day_state == null ||
         this.state.end_day_state == null
       ) {
-        alert("Bạn chưa nhập ngày");
+        alert("Please enter start day and end day\nOr use Android navigator to go back");
         // check firestore
         return;
       } else {
@@ -262,7 +262,7 @@ export default class RecordView extends Component {
         ) {
           console.log(this.state.start_day_state);
           console.log(this.state.end_day_state);
-          alert("start day must before end day");
+          alert("Start day must before end day");
           return;
         }
       }
@@ -281,97 +281,106 @@ export default class RecordView extends Component {
 
   render() {
     return (
-      <View style={{ flex: 1 }}>
+      <View style = {{ flex: 1 }}>
         <Header
-          leftComponent={{ 
-            icon: "chevron-left", color: "#fff", size: 30, 
-            onPress: this._onPressBackIcon}}
-          centerComponent={{
-            text: this.state.record_name,
-            style: { color: "#fff", fontSize: 27 }
+          backgroundColor = "#fff"
+
+          containerStyle = {{ flex: 1, paddingTop: 0, paddingLeft: 5, paddingRight: 5 }}
+
+          leftContainerStyle = {{ flex: 1 }}
+          rightContainerStyle = {{ flex: 1 }}
+          centerContainerStyle = {{ flex: 2 }}
+
+          leftComponent = {{ 
+            type: "material-community",
+            icon: "chevron-left", 
+            color: "#0085ff",
+            size: 33,
+            onPress: this._onPressBackIcon
           }}
-          rightComponent={{ icon: "home", color: "#fff" }}
+
+          rightComponent = {{
+
+          }}
+
+          centerComponent = {{
+            style: { fontSize: 24, fontWeight: "bold", color: "#0085ff" },
+            text: this.state.record_name
+          }}
         />
 
-        <View
-          style={{
-            flexDirection: "row",
-            margin: 5,
-            justifyContent: "space-around"
-          }}
-        >
+        <View style = {{ flex: 1, flexDirection: "row", alignItems: "center", justifyContent: "space-around", paddingTop: 4, borderTopWidth: 4, borderTopColor: "#0085ff" }}>
           <Button
-            large
-            icon={{ name: "date-range", color: "yellow" }}
-            title={this.state.start_day_text}
-            onPress={this._onPressCalendarStartDay}
+            buttonStyle = {{ width: 200, backgroundColor: "#0085ff" }}
+            icon = {{ name: "date-range", color: "#ffa500" }}
+            title = {this.state.start_day_text}
+            onPress = {this._onPressCalendarStartDay}
           />
 
           <Button
             large
-            icon={{ name: "date-range", color: "yellow" }}
-            title={this.state.end_day_text}
-            onPress={this._onPressCalendarEndDay}
+            buttonStyle = {{ width: 200, backgroundColor: "#0085ff" }}
+            icon = {{ name: "date-range", color: "#ffa500" }}
+            title = {this.state.end_day_text}
+            onPress = {this._onPressCalendarEndDay}
           />
         </View>
 
-        <View
-          style={{
-            //height: 340,
-            flex: 1,
-            marginTop: 10,
-            backgroundColor: "gainsboro",
-            borderColor: "black",
-            borderWidth: 2,
-            margin: 3
-          }}
-        >
+        <View style = {{ flex: 6, backgroundColor: "#fff", borderWidth: 2, borderColor: "#0085ff", margin: 2 }}>
           <FlatList
-            ref={"flatList"}
-            data={this.state.SPInfoList}
-            renderItem={({ item, index }) => {
+            ref = {"flatList"}
+            data = {this.state.SPInfoList}
+            renderItem = {({ item, index }) => {
               return (
                 <FirestoreItem
-                  item={item}
-                  parentFlatList={this}
-                  index={index}
+                  item ={ item }
+                  parentFlatList ={this}
+                  index ={index}
                 />
               );
             }}
             keyExtractor={(item, index) => item.id}
           />
-
           {/* old position of AddModal and EditModal */}
         </View>
 
         <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "center",
-            borderColor: "orange",
-            borderWidth: 3,
-            margin: 3,
-            padding: 3
-          }}
-        >
-          <Text
             style={{
-              fontSize: 20
+              flex: 1,
+              alignItems: "center",
+              justifyContent: "center",
+              borderColor: "#0085ff",
+              borderWidth: 2,
+              margin: 2
             }}
           >
-            Tổng cộng: {this.state.total} đồng
-          </Text>
-        </View>
+            <Text
+              style={{
+                fontSize: 20,
+                color: "#000"
+              }}
+            >
+              Total: {this.state.total} VND
+            </Text>
+          </View>
+        
 
-        <View>
+        <View style={{
+            flex: 1,
+            
+            alignItems: "center",
+            justifyContent: "center",
+            borderTopWidth: 4, borderTopColor: "#0085ff",
+          }}>
           <Button
-            title="Thêm"
+          buttonStyle= {{ width: 120, height: 40, backgroundColor: "#ffa500"}}
+            title="Add section"
+            titleProps = {{ fontSize: 20}}
             //containerStyle={{ height: 65}}
-            type="outline"
+            type="solid"
             //raised
             onPress={this._onPressAdd}
-            containerStyle={{ margin: 5, borderWidth: 2, 
-            borderColor: "blue", marginBottom: 15 }}
+           
           />
         </View>
 

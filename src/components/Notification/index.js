@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import { Alert, AsyncStorage } from "react-native";
+import { Alert } from "react-native";
+import AsyncStorage from "@react-native-community/async-storage"
 import firebase from 'react-native-firebase'
 
 export default class Notification extends Component {

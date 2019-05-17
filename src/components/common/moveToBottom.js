@@ -3,8 +3,8 @@ import { View } from "react-native";
 
 const moveToBottom = component => {
   return (
-    <View style={{ flex: 1, justifyContent: "flex-end", marginBottom: 36 }}>
-      {component}
+    <View style = {{ flex: 1, justifyContent: "flex-end", marginBottom: 10 }}>
+      { component }
     </View>
   );
 };

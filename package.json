@@ -3,33 +3,33 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "react-native run-android",
+    "start": "node node_modules/react-native/local-cli/cli.js start",
     "test": "jest"
   },
   "dependencies": {
     "@react-native-community/async-storage": "^1.4.0",
-    "firebase": "^5.10.0",
+    "firebase": "^6.0.2",
     "native-base": "^2.12.1",
     "random-string": "^0.2.0",
     "react": "16.8.3",
-    "react-native": "0.59.4",
-    "react-native-button": "^2.3.0",
-    "react-native-calendars": "^1.46.0",
+    "react-native": "0.59.8",
+    "react-native-button": "^2.4.0",
+    "react-native-calendars": "^1.136.0",
     "react-native-elements": "^1.1.0",
     "react-native-firebase": "^5.3.1",
     "react-native-gesture-handler": "^1.2.1",
-    "react-native-modal-datetime-picker": "^7.4.0",
+    "react-native-modal-datetime-picker": "^7.4.2",
     "react-native-modalbox": "^1.7.1",
     "react-native-swipeout": "^2.3.6",
     "react-native-vector-icons": "^6.4.2",
-    "react-navigation": "^3.8.1"
+    "react-navigation": "^3.9.2"
   },
   "devDependencies": {
-    "@babel/core": "^7.4.3",
-    "@babel/runtime": "^7.4.3",
-    "babel-jest": "^24.7.1",
-    "jest": "^24.7.1",
-    "metro-react-native-babel-preset": "^0.53.1",
+    "@babel/core": "^7.4.4",
+    "@babel/runtime": "^7.4.4",
+    "babel-jest": "^24.8.0",
+    "jest": "^24.8.0",
+    "metro-react-native-babel-preset": "^0.54.1",
     "react-test-renderer": "16.8.3"
   },
   "jest": {
