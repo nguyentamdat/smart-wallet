@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "444508632292",
+    "firebase_url": "https://srem-b062f.firebaseio.com",
+    "project_id": "srem-b062f",
+    "storage_bucket": "srem-b062f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:444508632292:android:6ad89833f3d02651",
+        "android_client_info": {
+          "package_name": "com.srem"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "444508632292-eh75oh1e6og5vu76kbc9bdroh0okqpai.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCSyshl4-9KKhgjFVfZhX5j_s0WjkeKSoQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "444508632292-eh75oh1e6og5vu76kbc9bdroh0okqpai.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
