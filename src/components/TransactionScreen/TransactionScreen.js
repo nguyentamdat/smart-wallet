@@ -92,14 +92,14 @@ class TransactionScreen extends Component {
               </Title>
             </Body>
             <Right style={{ flex: 1 }}>
-              <Button
+              {/* <Button
                 transparent
                 onPress={() =>
                   this.props.navigation.navigate("NotificationView")
                 }
               >
                 <Icon name="bell" type="MaterialCommunityIcons" />
-              </Button>
+              </Button> */}
             </Right>
           </Header>
 
