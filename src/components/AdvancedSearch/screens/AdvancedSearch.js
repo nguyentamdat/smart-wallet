@@ -55,10 +55,12 @@ export default class AdvancedSearchScreen extends Component {
             purposesChosen: [],
             timeStart: dateStart,
             timeEnd: dateEnd,
-            note: "",
-            results: [],
-            purposeResults: []
+            note: ""
         };
+    }
+
+    componentDidMount() {
+        this.setState({ results: this.state.results });
     }
     /*** Handle Data Change through Components ***/
     _handleMoneyStartChange = value => {
@@ -84,24 +86,6 @@ export default class AdvancedSearchScreen extends Component {
     _handleNoteChange = content => {
         this.setState({ note: content });
     };
-    /*** Add RE to database ***/
-    // _addRE() {
-    //     this.database
-    //         .collection("transactions")
-    //         .add({
-    //             money: parseFloat(this.state.moneyStart),
-    //             purpose: this.state.purposesChosen[0],
-    //             time: this.state.timeStart,
-    //             note: this.state.note
-    //         })
-    //         .catch(error => {
-    //             console.log("Error adding document: ", error);
-    //         });
-    // }
-
-    componentDidMount() {
-        this.setState({ results: this.state.results });
-    }
 
     render() {
         return (
@@ -151,14 +135,6 @@ export default class AdvancedSearchScreen extends Component {
                         }
                     ]}
                 >
-                    {/* <Button
-                        iconLeft
-                        style={styles.footerButton}
-                        onPress={() => this._addRE()}
-                    >
-                        <Icon type="MaterialIcons" name="add" />
-                        <Text>Thêm RE</Text>
-                    </Button> */}
                     <Button
                         iconLeft
                         style={[styles.footerButton, { width: 225 }]}
@@ -186,7 +162,7 @@ export default class AdvancedSearchScreen extends Component {
                         }}
                     >
                         <Icon type="AntDesign" name="search1" />
-                        <Text>Tìm kiếm</Text>
+                        <Text>Tìm</Text>
                     </Button>
                 </Footer>
             </Container>
