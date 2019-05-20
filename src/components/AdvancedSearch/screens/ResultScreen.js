@@ -40,6 +40,7 @@ export default class SearchResultScreen extends Component {
     }
 
     async componentWillMount() {
+        console.log("Willmount result");
         this.setState({
             moneyStart: this.props.navigation.state.params.moneyStart,
             moneyEnd: this.props.navigation.state.params.moneyEnd,
@@ -51,7 +52,9 @@ export default class SearchResultScreen extends Component {
     }
 
     componentDidMount() {
+        console.log("didmount result before search");
         this._search();
+        console.log("didmount result after search");
     }
 
     componentWillUnmount() {

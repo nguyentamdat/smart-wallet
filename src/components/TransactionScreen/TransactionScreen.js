@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { TouchableOpacity } from "react-native";
 import {
   View,
   Container,
@@ -25,7 +26,9 @@ import {
   Title
 } from "native-base";
 import firebase from "react-native-firebase";
+import SeparatorCustom from "../../components/common/SeparatorCustom";
 import styles from "../AdvancedSearch/styles";
+import commonColor from "../../variables/commonColor";
 
 let initState = { listTrans: [], loading: true, wallet: null };
 
@@ -63,39 +66,28 @@ class TransactionScreen extends Component {
     console.log(total);
     this.setState({ wallet: total });
   }
+
+  transform_3digit(value) {
+    if (value !== null)
+      return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+
   render() {
-    if (this.state.loading)
-      return (
-        <Container>
-          <Spinner />
-        </Container>
-      );
-    else
-      return (
-        <Container>
-          <Header>
-            <Left style={{ flex: 1 }}>
-              <Button
-                transparent
-                onPress={() => this.props.navigation.navigate("AdvancedSearch")}
-              >
-                <Icon type="AntDesign" name="search1" />
-              </Button>
-            </Left>
-            <Body style={{ flex: 4 }}>
-              <Title
-                style={{
-                  textTransform: "uppercase",
-                  fontSize: 26,
-                  alignSelf: "center",
-                  color: this.state.wallet >= 0 ? "#00ff55" : "#ff6666"
-                }}
-              >
-                {this.state.wallet}
-              </Title>
-            </Body>
-            <Right style={{ flex: 1 }}>
-              {/* <Button
+    return (
+      <Container>
+        <Header>
+          <Body>
+            <Title
+              style={{
+                fontSize: 24,
+                alignSelf: "center"
+              }}
+            >
+              Tổng quan
+            </Title>
+          </Body>
+          {/* <Right style={{ flex: 1 }}>
+                        <Button
                                 transparent
                                 onPress={() =>
                                     this.props.navigation.navigate(
@@ -107,94 +99,123 @@ class TransactionScreen extends Component {
                                     name="bell"
                                     type="MaterialCommunityIcons"
                                 />
-                            </Button> */}
-            </Right>
-          </Header>
+                            </Button>
+                    </Right> */}
+        </Header>
 
-          <Content>
-            {this.state.listTrans.map(x => {
-              const date = x.date.toDate();
-              return (
-                <ListItem key={x.key} noIndent>
-                  <View style={styles.iconListItem}>
-                    <Button transparent style={{ alignSelf: "center" }}>
-                      <Icon
-                        active
-                        type={x.purpose.iconType}
-                        name={x.purpose.iconName}
-                      />
-                    </Button>
-                  </View>
-                  <Body
-                    style={{
-                      flexDirection: "column",
-                      flex: 1,
-                      alignContent: "flex-start"
-                    }}
-                  >
-                    <Text
+        <View style={[styles.stableArea, { height: 60 }]}>
+          <TouchableOpacity
+            style={styles.touchableOpacityRow}
+            onPress={() => this.props.navigation.navigate("AdvancedSearch")}
+          >
+            <Left style={{ alignItems: "center" }}>
+              <Icon
+                type="FontAwesome"
+                name="search"
+                style={{
+                  color: commonColor.inputPlaceholder,
+                  fontSize: 25
+                }}
+              />
+            </Left>
+            <Body style={{ flex: 5, alignItems: "flex-start" }}>
+              <Text
+                style={{
+                  color: commonColor.inputPlaceholder,
+                  fontSize: 18
+                }}
+              >
+                Tìm kiếm nâng cao
+              </Text>
+            </Body>
+            <Right style={{ marginRight: 15 }}>
+              <Icon
+                active
+                type="Ionicons"
+                name="ios-arrow-forward"
+                style={{
+                  color: commonColor.inputPlaceholder,
+                  fontSize: 20
+                }}
+              />
+            </Right>
+          </TouchableOpacity>
+        </View>
+
+        <SeparatorCustom />
+
+        <View style={[styles.stableArea]}>
+          <Text
+            style={{
+              fontSize: 18,
+              color: commonColor.subText
+            }}
+          >
+            Tổng tiền:{"  "}
+          </Text>
+          {this.state.loading ? (
+            <Spinner style={{ height: 50 }} size="small" />
+          ) : (
+            <Text
+              style={{
+                fontWeight: "bold",
+                fontSize: 20
+              }}
+            >
+              {this.transform_3digit(this.state.wallet)}
+            </Text>
+          )}
+        </View>
+
+        <SeparatorCustom />
+
+        <Content>
+          {this.state.loading ? (
+            <Spinner />
+          ) : (
+            <Content>
+              {this.state.listTrans.map(x => {
+                const date = x.date.toDate();
+                return (
+                  <ListItem key={x.key} noIndent>
+                    <View style={styles.iconListItem}>
+                      <Button transparent style={{ alignSelf: "center" }}>
+                        <Icon
+                          active
+                          type={x.purpose.iconType}
+                          name={x.purpose.iconName}
+                        />
+                      </Button>
+                    </View>
+                    <Body
                       style={{
-                        color: x.purpose.isRevenue ? "#00cc44" : "#e60000",
-                        fontSize: 24
+                        flexDirection: "column",
+                        flex: 2,
+                        alignContent: "flex-start"
                       }}
                     >
-                      {x.amount}
-                    </Text>
-                    <Text>{x.purpose.name}</Text>
-                  </Body>
-                  <Right style={{ flex: 1 }}>
-                    <Text>{date.toLocaleDateString()}</Text>
-                    <Text>{date.toLocaleTimeString()}</Text>
-                  </Right>
-                </ListItem>
-              );
-            })}
-            {/* <List
-              rightOpenValue={-75}
-              renderRow={x => (
-                <ListItem key={x.key} noIndent>
-                  <View style={styles.iconListItem}>
-                    <Button transparent style={{ alignSelf: "center" }}>
-                      <Icon
-                        active
-                        type={x.purpose.iconType}
-                        name={x.purpose.iconName}
-                      />
-                    </Button>
-                  </View>
-                  <Body
-                    style={{
-                      flexDirection: "column",
-                      flex: 1,
-                      alignContent: "flex-start"
-                    }}
-                  >
-                    <Text
-                      style={{
-                        color: x.purpose.isRevenue ? "#00cc44" : "#e60000",
-                        fontSize: 24
-                      }}
-                    >
-                      {x.amount}
-                    </Text>
-                    <Text>{x.purpose.name}</Text>
-                  </Body>
-                  <Right style={{ flex: 1 }}>
-                    <Text>{date.toLocaleDateString()}</Text>
-                    <Text>{date.toLocaleTimeString()}</Text>
-                  </Right>
-                </ListItem>
-              )}
-              dataSource={this.state.listTrans}
-              renderRightHiddenRow={x => (
-                <Button full danger onPress={x => {}}>
-                  <Icon active name="trash" />
-                </Button>
-              )}
-            /> */}
-          </Content>
-        </Container>
-      );
+                      <Text
+                        style={{
+                          color: x.purpose.isRevenue ? "#00cc44" : "#e60000",
+                          fontSize: 20
+                        }}
+                      >
+                        {this.transform_3digit(x.amount)}
+                      </Text>
+                      <Text>{x.purpose.name}</Text>
+                    </Body>
+                    <Right style={{ flex: 1 }}>
+                      <Text>{date.toLocaleDateString()}</Text>
+                      <Text>{date.toLocaleTimeString()}</Text>
+                    </Right>
+                  </ListItem>
+                );
+              })}
+            </Content>
+          )}
+        </Content>
+      </Container>
+    );
   }
 }
 
