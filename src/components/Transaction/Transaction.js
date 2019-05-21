@@ -211,7 +211,7 @@ class AddTransaction extends Component {
             iconLeft
             style={[styles.footerButton, { width: 225 }]}
             onPress={this.submitTransaction}
-            disabled={!this.state.amount}
+            disabled={!this.state.amount || !this.state.purpose}
           >
             <Icon name="content-save" size={25} style={{ color: "#fff" }} />
             <Text
