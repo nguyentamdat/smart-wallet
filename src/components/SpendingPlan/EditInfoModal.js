@@ -16,8 +16,9 @@ import Button from "react-native-button";
 import Modal from "react-native-modalbox";
 import firebase from "react-native-firebase";
 
+
 var screen = Dimensions.get("window");
-export default class EditModal extends Component {
+export default class EditInfoModal extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -25,16 +26,12 @@ export default class EditModal extends Component {
       editingAmount: "",
       editingDescription: "",
       item_id: "",
+      isRevenue: null,
     };
 
   }
   
-  showEditModal = () => {
-    this.setState({
-      editingCategory: "",
-      editingAmount: "",
-      editingDescription: ""
-    })
+  showEditInfoModal = () => {    
     this.refs.myModal.open();
   };
   render() {
@@ -95,6 +92,13 @@ export default class EditModal extends Component {
           }}
           onChangeText={text => this.setState({ editingCategory: text })}
           placeholder="Enter purpose"
+          onFocus = {() => this.props.navigation.navigate("PurposeSelect", {
+            isSingleSelect: true,
+            selectPurpose: async purpose => {
+              this.setState({editingCategory: purpose.name});
+              this.setState({isRevenue: purpose.isRevenue});
+            }
+          })}
           value={this.state.editingCategory}
         />
 
@@ -134,13 +138,19 @@ export default class EditModal extends Component {
               return;
             }
 
+            if (this.state.editingAmount.length > 9) {
+              alert("Please enter the amount less than one billion");
+              return;
+            }
+
             firebase.firestore().collection('SPRecordList')
-            .doc(this.props.parentFlatList.props.navigation.getParam('itemId', 'noId'))
+            .doc(this.props.navigation.getParam('itemId', 'noId'))
             .collection('SPRecord').doc(this.state.item_id)
             .update({
                 category: this.state.editingCategory,
                 amount: this.state.editingAmount,
-                description: this.state.editingDescription
+                description: this.state.editingDescription,
+                isRevenue: this.state.isRevenue
             });
 
             

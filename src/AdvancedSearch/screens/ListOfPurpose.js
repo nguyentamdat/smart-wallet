@@ -68,7 +68,7 @@ export default class ListOfPurpose extends Component {
       this.setState({
         purposeInList: this.state.purposeInList.concat(purpose)
       });
-      this.props.navigation.state.params. (purpose);
+      this.props.navigation.state.params.purpose;
     }
   };
 

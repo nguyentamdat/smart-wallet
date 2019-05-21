@@ -25,9 +25,6 @@ export default class AddRecordModal extends Component {
     this.setState({recordName: ""});
     this.refs.currentModal.open();
   };
-  generateKey = numOfCharacters => {
-    return require("random-string")({ length: numOfCharacters });
-  };
 
   render() {
     return (
@@ -51,7 +48,7 @@ export default class AddRecordModal extends Component {
         <Button
           style = {{ fontSize: 16, color: "white" }}
           containerStyle = {{ padding: 8, height: 40, width: 120, borderRadius: 6, backgroundColor: "#ffa500" }}
-          onPress={() => {
+          onPress={() => {  // onPressSaveButton
             if (
               this.state.recordName.length == 0 
             ) {
