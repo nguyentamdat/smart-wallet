@@ -32,7 +32,6 @@ import MainView from "../SpendingPlan/MainView";
 import ListOfPurpose from "../PurposeSelectScreen/ListOfPurpose";
 import AdvancedSearchScreen from "../AdvancedSearch/screens/AdvancedSearch";
 import SearchResultScreen from "../AdvancedSearch/screens/ResultScreen";
-import NotificationScreen from "../NotificationScreen/index";
 import RecordView from "../SpendingPlan/RecordView";
 
 YellowBox.ignoreWarnings(["WebView"]);
@@ -42,7 +41,6 @@ const TransactionStack = createStackNavigator(
         Transaction: TransactionScreen,
         AdvancedSearch: AdvancedSearchScreen,
         PurposeSelect: ListOfPurpose,
-        NotificationView: NotificationScreen,
         SearchResult: SearchResultScreen
     },
     {

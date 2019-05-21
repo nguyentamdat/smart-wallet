@@ -4,19 +4,6 @@ import AsyncStorage from "@react-native-community/async-storage"
 import firebase from 'react-native-firebase'
 
 export default class Notification extends Component {
-  //Prepare for notification listener
-  async componentDidMount() {
-    this.checkPermission();
-    this.createNotificationListeners();
-  }
-
-  //Remove listeners allocated in createNotificationListeners()
-  componentWillUnmount() {
-    this.notificationListener();
-    this.notificationOpenedListener();
-  }
-
-  //1
   async checkPermission() {
     const enabled = await firebase.messaging().hasPermission();
     if (enabled) {
@@ -26,31 +13,23 @@ export default class Notification extends Component {
       this.requestPermission();
     }
   }
-
-  //3
+  async requestPermission() {
+    try {
+      await firebase.messaging().requestPermission();
+      this.getToken();
+    } catch (error) {
+      console.log('permission rejected');
+    }
+  }
   async getToken() {
     let fcmToken = await AsyncStorage.getItem('fcmToken');
     if (!fcmToken) {
       fcmToken = await firebase.messaging().getToken();
       if (fcmToken) {
-        // user has a device token
         await AsyncStorage.setItem('fcmToken', fcmToken);
       }
     }
   }
-
-  //2
-  async requestPermission() {
-    try {
-      await firebase.messaging().requestPermission();
-      // User has authorised
-      this.getToken();
-    } catch (error) {
-      // User has rejected permissions
-      console.log('permission rejected');
-    }
-  }
-
   async createNotificationListeners() {
     /**
      * Triggered when a particular notification has been received in foreground
@@ -85,7 +64,6 @@ export default class Notification extends Component {
       console.log(JSON.stringify(message));
     });
   }
-
   showAlert(title, body) {
     Alert.alert(
       title, body,
@@ -95,7 +73,4 @@ export default class Notification extends Component {
       { cancelable: false },
     );
   }
-
 }
-
-export default Notification;
