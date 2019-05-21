@@ -1,21 +1,21 @@
 import React, { Component } from "react";
 import { Alert } from "react-native";
 import {
-    Container,
-    Header,
-    Title,
-    Content,
-    Footer,
-    FooterTab,
-    Button,
-    Left,
-    Right,
-    Body,
-    Icon,
-    Text,
-    List,
-    ListItem,
-    View
+  Container,
+  Header,
+  Title,
+  Content,
+  Footer,
+  FooterTab,
+  Button,
+  Left,
+  Right,
+  Body,
+  Icon,
+  Text,
+  List,
+  ListItem,
+  View
 } from "native-base";
 import SearchByMoney from "./SearchByMoney";
 import SearchByPurpose from "./SearchByPurpose";
@@ -26,170 +26,145 @@ import styles from "../styles";
 //import console from "console";
 
 export default class AdvancedSearchScreen extends Component {
-    constructor(props) {
-        super(props);
-        this.database = firebaseApp.firestore();
-        const currentDate = new Date();
-        const dateStart = new Date(
-            currentDate.getFullYear(),
-            currentDate.getMonth(),
-            1,
-            0,
-            0,
-            0,
-            0
-        );
-        const dateEnd = new Date(
-            currentDate.getFullYear(),
-            currentDate.getMonth() + 1,
-            0,
-            23,
-            59,
-            59,
-            999
-        );
+  constructor(props) {
+    super(props);
+    this.database = firebaseApp.firestore();
+    const currentDate = new Date();
+    const dateStart = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth(),
+      1,
+      0,
+      0,
+      0,
+      0
+    );
+    const dateEnd = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth() + 1,
+      0,
+      23,
+      59,
+      59,
+      999
+    );
 
-        this.state = {
-            moneyStart: 0,
-            moneyEnd: 0,
-            purposesChosen: [],
-            timeStart: dateStart,
-            timeEnd: dateEnd,
-            note: "",
-            results: [],
-            purposeResults: []
-        };
-    }
-    /*** Handle Data Change through Components ***/
-    _handleMoneyStartChange = value => {
-        this.setState({ moneyStart: parseFloat(value) });
+    this.state = {
+      moneyStart: 0,
+      moneyEnd: 0,
+      purposesChosen: [],
+      timeStart: dateStart,
+      timeEnd: dateEnd,
+      note: ""
     };
+  }
 
-    _handleMoneyEndChange = value => {
-        this.setState({ moneyEnd: parseFloat(value) });
-    };
+  componentDidMount() {
+    this.setState({ results: this.state.results });
+  }
+  /*** Handle Data Change through Components ***/
+  _handleMoneyStartChange = value => {
+    this.setState({ moneyStart: parseFloat(value) });
+  };
+  /*** Handle Data Change through Components ***/
+  _handleMoneyStartChange = value => {
+    this.setState({ moneyStart: parseFloat(value) });
+  };
 
-    _handlePurposeChosen = purposes => {
-        this.setState({ purposesChosen: purposes });
-    };
+  _handleMoneyEndChange = value => {
+    this.setState({ moneyEnd: parseFloat(value) });
+  };
 
-    _handleTimeStartChange = date => {
-        this.setState({ timeStart: date });
-    };
+  _handlePurposeChosen = purposes => {
+    this.setState({ purposesChosen: purposes });
+  };
 
-    _handleTimeEndChange = date => {
-        this.setState({ timeEnd: date });
-    };
+  _handleTimeStartChange = date => {
+    this.setState({ timeStart: date });
+  };
 
-    _handleNoteChange = content => {
-        this.setState({ note: content });
-    };
-    /*** Add RE to database ***/
-    // _addRE() {
-    //     this.database
-    //         .collection("transactions")
-    //         .add({
-    //             money: parseFloat(this.state.moneyStart),
-    //             purpose: this.state.purposesChosen[0],
-    //             time: this.state.timeStart,
-    //             note: this.state.note
-    //         })
-    //         .catch(error => {
-    //             console.log("Error adding document: ", error);
-    //         });
-    // }
+  _handleTimeEndChange = date => {
+    this.setState({ timeEnd: date });
+  };
 
-    componentDidMount() {
-        this.setState({ results: this.state.results });
-    }
+  _handleNoteChange = content => {
+    this.setState({ note: content });
+  };
 
-    render() {
-        return (
-            <Container style={styles.container}>
-                <Header>
-                    <Left>
-                        <Button
-                            transparent
-                            onPress={() => this.props.navigation.goBack()}
-                        >
-                            <Icon name="ios-arrow-back" type="Ionicons" />
-                        </Button>
-                    </Left>
-                    <Body>
-                        <Title style={{ textTransform: "uppercase" }}>
-                            tìm kiếm nâng cao
-                        </Title>
-                    </Body>
-                </Header>
+  render() {
+    return (
+      <Container style={styles.container}>
+        <Header>
+          <Left>
+            <Button transparent onPress={() => this.props.navigation.goBack()}>
+              <Icon name="ios-arrow-back" type="Ionicons" />
+            </Button>
+          </Left>
+          <Body>
+            <Title style={{ textTransform: "uppercase" }}>
+              tìm kiếm nâng cao
+            </Title>
+          </Body>
+        </Header>
 
-                <Content>
-                    <SearchByMoney
-                        moneyStart={this.state.moneyStart}
-                        moneyStartChange={this._handleMoneyStartChange}
-                        moneyEnd={this.state.moneyEnd}
-                        moneyEndChange={this._handleMoneyEndChange}
-                    />
-                    <SearchByPurpose
-                        navigation={this.props.navigation}
-                        purposeChange={this._handlePurposeChosen}
-                    />
-                    <SearchByTime
-                        timeStartChange={this._handleTimeStartChange}
-                        timeEndChange={this._handleTimeEndChange}
-                    />
-                    <SearchByNote
-                        noteContent={this.state.note}
-                        noteChange={this._handleNoteChange}
-                    />
-                </Content>
+        <Content>
+          <SearchByMoney
+            moneyStart={this.state.moneyStart}
+            moneyStartChange={this._handleMoneyStartChange}
+            moneyEnd={this.state.moneyEnd}
+            moneyEndChange={this._handleMoneyEndChange}
+          />
+          <SearchByPurpose
+            navigation={this.props.navigation}
+            purposeChange={this._handlePurposeChosen}
+          />
+          <SearchByTime
+            timeStartChange={this._handleTimeStartChange}
+            timeEndChange={this._handleTimeEndChange}
+          />
+          <SearchByNote
+            noteContent={this.state.note}
+            noteChange={this._handleNoteChange}
+          />
+        </Content>
 
-                <Footer
-                    style={[
-                        styles.footer,
-                        {
-                            justifyContent: "center"
-                        }
-                    ]}
-                >
-                    {/* <Button
-                        iconLeft
-                        style={styles.footerButton}
-                        onPress={() => this._addRE()}
-                    >
-                        <Icon type="MaterialIcons" name="add" />
-                        <Text>Thêm RE</Text>
-                    </Button> */}
-                    <Button
-                        iconLeft
-                        style={[styles.footerButton, { width: 225 }]}
-                        onPress={() => {
-                            if (this.state.moneyStart > this.state.moneyEnd) {
-                                Alert.alert(
-                                    "Giá trị của 'Tiền bắt đầu' không được lớn hơn 'Tiền kết thúc'"
-                                );
-                            } else if (
-                                this.state.timeStart > this.state.timeEnd
-                            ) {
-                                Alert.alert(
-                                    "'Thời gian bắt đầu' không được lớn hơn 'Thời gian kết thúc'"
-                                );
-                            } else {
-                                this.props.navigation.navigate("SearchResult", {
-                                    moneyStart: this.state.moneyStart,
-                                    moneyEnd: this.state.moneyEnd,
-                                    purposesChosen: this.state.purposesChosen,
-                                    timeStart: this.state.timeStart,
-                                    timeEnd: this.state.timeEnd,
-                                    note: this.state.note
-                                });
-                            }
-                        }}
-                    >
-                        <Icon type="AntDesign" name="search1" />
-                        <Text>Tìm kiếm</Text>
-                    </Button>
-                </Footer>
-            </Container>
-        );
-    }
+        <Footer
+          style={[
+            styles.footer,
+            {
+              justifyContent: "center"
+            }
+          ]}
+        >
+          <Button
+            iconLeft
+            style={[styles.footerButton, { width: 225 }]}
+            onPress={() => {
+              if (this.state.moneyStart > this.state.moneyEnd) {
+                Alert.alert(
+                  "Giá trị của 'Tiền bắt đầu' không được lớn hơn 'Tiền kết thúc'"
+                );
+              } else if (this.state.timeStart > this.state.timeEnd) {
+                Alert.alert(
+                  "'Thời gian bắt đầu' không được lớn hơn 'Thời gian kết thúc'"
+                );
+              } else {
+                this.props.navigation.navigate("SearchResult", {
+                  moneyStart: this.state.moneyStart,
+                  moneyEnd: this.state.moneyEnd,
+                  purposesChosen: this.state.purposesChosen,
+                  timeStart: this.state.timeStart,
+                  timeEnd: this.state.timeEnd,
+                  note: this.state.note
+                });
+              }
+            }}
+          >
+            <Icon type="AntDesign" name="search1" />
+            <Text>Tìm</Text>
+          </Button>
+        </Footer>
+      </Container>
+    );
+  }
 }

@@ -5,7 +5,7 @@ import {
   TimePickerAndroid,
   Picker
 } from "react-native";
-import { Card, Input, CheckBox, Image } from "react-native-elements";
+import { Card, CheckBox, Image } from "react-native-elements";
 import {
   Container,
   Content,
@@ -17,7 +17,9 @@ import {
   Title,
   Footer,
   Button,
-  Text
+  Text,
+  List,
+  Input
 } from "native-base";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { moveToBottom } from "../common";
@@ -25,7 +27,6 @@ import firebase from "react-native-firebase";
 import styles from "../AdvancedSearch/styles";
 
 const initState = {
-  repeated: false,
   amount: null,
   purpose: null,
   note: "",
@@ -48,7 +49,8 @@ class AddTransaction extends Component {
     try {
       const { action, year, month, day } = await DatePickerAndroid.open({
         date: this.state.date,
-        mode: "spinner"
+        mode: "spinner",
+        maxDate: new Date()
       });
       if (action !== DatePickerAndroid.dismissedAction) {
         const date = this.state.date;
@@ -112,36 +114,35 @@ class AddTransaction extends Component {
                     // }}
                 /> */}
         <Header>
-          <Left>
-            <Button
-              transparent
-              onPress={() => this.props.navigation.navigate("AdvancedSearch")}
+          <Body>
+            <Title
+              style={{
+                fontSize: 24,
+                alignSelf: "center"
+              }}
             >
-              <Icon name="crop-free" size={25} style={{ color: "#fff" }} />
-            </Button>
-          </Left>
-          <Body style={{ flex: 1 }}>
-            <Title style={{ textTransform: "uppercase" }}>
               Ghi khoản thu/chi
             </Title>
           </Body>
         </Header>
 
         <Content>
-          <Card>
-            <Input
-              containerStyle={{ borderWidth: 0 }}
-              placeholder="Số tiền"
-              value={this.state.amount}
-              name="amount"
-              onChangeText={amount => {
-                if (!isNaN(amount)) {
-                  this.setState({ amount });
-                }
-              }}
-              keyboardType="numeric"
-              rightIcon={<Image source={{ uri: "../../public/dong.png" }} />}
-            />
+          <List>
+            <ListItem>
+              <Input
+                containerStyle={{ borderWidth: 0 }}
+                placeholder="Số tiền"
+                value={this.state.amount}
+                name="amount"
+                onChangeText={amount => {
+                  if (!isNaN(amount)) {
+                    this.setState({ amount });
+                  }
+                }}
+                keyboardType="numeric"
+                rightIcon={<Image source={{ uri: "../../public/dong.png" }} />}
+              />
+            </ListItem>
             <ListItem
               noIndent
               onPress={() => {
@@ -168,32 +169,15 @@ class AddTransaction extends Component {
                             });
                         }}
                     /> */}
-            <CheckBox
-              title="Lặp lại"
-              name="repeated"
-              checked={this.state.repeated}
-              onPress={() =>
-                this.setState({
-                  repeated: !this.state.repeated
-                })
-              }
-              checkedIcon="dot-circle-o"
-              uncheckedIcon="circle-o"
-              iconRight
-              containerStyle={{
-                backgroundColor: "#FFF",
-                borderWidth: 0,
-                borderBottomWidth: 1,
-                borderColor: "grey"
-              }}
-            />
-            <Input
-              placeholder="Ghi chú"
-              name="note"
-              value={this.state.note}
-              onChangeText={note => this.setState({ note })}
-            />
-            <View
+            <ListItem>
+              <Input
+                placeholder="Ghi chú"
+                name="note"
+                value={this.state.note}
+                onChangeText={note => this.setState({ note })}
+              />
+            </ListItem>
+            <ListItem
               style={{
                 flexDirection: "row",
                 justifyContent: "center"
@@ -206,14 +190,14 @@ class AddTransaction extends Component {
                 }}
               >
                 <Button onPress={this.datePicker} transparent>
-                  <Text>{dateToText}</Text>
+                  <Text style={{ fontSize: 20 }}>{dateToText}</Text>
                 </Button>
                 <Button onPress={this.timePicker} transparent>
-                  <Text>{timeToText}</Text>
+                  <Text style={{ fontSize: 20 }}>{timeToText}</Text>
                 </Button>
               </View>
-            </View>
-          </Card>
+            </ListItem>
+          </List>
         </Content>
         <Footer
           style={[
