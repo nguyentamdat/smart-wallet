@@ -27,12 +27,12 @@ import {
 /*** Main Tabs Screens ***/
 import TransactionScreen from "../TransactionScreen/TransactionScreen";
 import AddTransaction from "../Transaction/Transaction";
-import MainView from "../SpendingPlan/MainView";
+import SPMainScreen from "../SpendingPlan/SPMainScreen";
 /*** Sub Screens in Stacks***/
 import ListOfPurpose from "../PurposeSelectScreen/ListOfPurpose";
 import AdvancedSearchScreen from "../AdvancedSearch/screens/AdvancedSearch";
 import SearchResultScreen from "../AdvancedSearch/screens/ResultScreen";
-import RecordView from "../SpendingPlan/RecordView";
+import SPRecordScreen from "../SpendingPlan/SPRecordScreen";
 
 YellowBox.ignoreWarnings(["WebView"]);
 
@@ -64,15 +64,16 @@ const AddTransactionStack = createStackNavigator(
 );
 
 const SpendingPlanStack = createStackNavigator(
-    {
-        SPMainScreen: MainView,
-        SPRecordScreen: RecordView
-    },
-    {
-        initialRouteName: "SPMainScreen",
-        defaultNavigationOptions: {},
-        headerMode: "none"
-    }
+  {
+    SPMainScreen: SPMainScreen,
+    SPRecordScreen: SPRecordScreen,
+    PurposeSelect: ListOfPurpose
+  },
+  {
+    initialRouteName: "SPMainScreen",
+    defaultNavigationOptions: {},
+    headerMode: "none"
+  }
 );
 
 const TabNavigator = createBottomTabNavigator(

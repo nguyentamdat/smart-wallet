@@ -15,9 +15,10 @@ import {
 import Button from "react-native-button";
 import Modal from "react-native-modalbox";
 import firebase from "react-native-firebase";
+//import console = require("console");
 
 var screen = Dimensions.get("window");
-export default class AddModal extends Component {
+export default class AddInfoModal extends Component {
   constructor(props) {
     super(props);
     // Add firestore
@@ -29,18 +30,16 @@ export default class AddModal extends Component {
       newCategory: "",
       newAmount: "",
       newDescription: "",
+      isRevenue: null,
     };
   }
-  showAddModal = () => {
+  showAddInfoModal = () => {
     this.setState({
       newCategory: "",
       newAmount: "",
       newDescription: ""
     });
     this.refs.myModal.open();
-  };
-  generateKey = numOfCharacters => {
-    return require("random-string")({ length: numOfCharacters });
   };
 
   render() {
@@ -69,7 +68,14 @@ export default class AddModal extends Component {
           style = {{ height: 40, width: 240, marginLeft: 30, marginRight: 30, marginTop: 5, marginBottom: 15, borderBottomWidth: 1, borderBottomColor: "#000" }}
           onChangeText = {text => this.setState({ newCategory: text })}
           placeholder="Enter purpose"
-          //value={this.state.newCategory}
+          onFocus={() => this.props.navigation.navigate("PurposeSelect", {
+            isSingleSelect: true,
+            selectPurpose: async purpose => {
+              this.setState({ newCategory: purpose.name });
+              this.setState({isRevenue: purpose.isRevenue});
+            }
+          })}
+          value={this.state.newCategory}
         />
 
         <TextInput
@@ -92,13 +98,18 @@ export default class AddModal extends Component {
               alert("Please enter all above information!!!\nOr swipe down to dismiss");
               return;
             }
+
+            if (this.state.newAmount.length > 9) {
+              alert("Please enter the amount less than one billion");
+              return;
+            }
             
             // firestore
             this.ref.add({
               category: this.state.newCategory,
               amount: this.state.newAmount,
               description: this.state.newDescription,
-              
+              isRevenue: this.state.isRevenue,
             });
 
             this.refs.myModal.close();

@@ -9,8 +9,6 @@ import Modal from 'react-native-modalbox';
 import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
 import { Row } from 'native-base';
 import firebase from 'react-native-firebase';
-//import console = require('console');
-//import console = require('console');
 
 var screen = Dimensions.get('window');
 export default class AddModal extends Component {
@@ -57,7 +55,7 @@ export default class AddModal extends Component {
                     borderRadius: Platform.OS === 'ios' ? 30 : 20,
                     shadowRadius: 10,
                     width: screen.width - 80,
-                    height: 400, //280
+                    height: 390, //280
                 }}
                 position='center'
                 backdrop={true}
@@ -66,11 +64,12 @@ export default class AddModal extends Component {
                 onClosed={() => {
                     //alert("Modal closed");
                 }}
+                
             >
 
                 <View style={{
                     backgroundColor: 'lightcoral',
-                    height: 400,
+                    //height: 450,
                 }}>
 
                     <Text style={{
@@ -82,6 +81,7 @@ export default class AddModal extends Component {
                     }}>Chọn ngày
                     </Text>
 
+                    <View >
                     <Calendar
                     markedDates={{[this.state.selectedDate]:{selected: true},}}
                     onDayPress={(day) => {
@@ -96,11 +96,10 @@ export default class AddModal extends Component {
                         }
                         
                         }}
-                    minDate={this.state.minStartDay}
+                        minDate={this.state.minStartDay}
                     >
-
                     </Calendar>
-                    
+                    </View>
 
                     <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
                     <Button
@@ -142,7 +141,6 @@ export default class AddModal extends Component {
                             () => {
                                 if (this.state.buttonState=='start') {
                                     this.props.parentFlatList.setState({
-                                    //start_day_text: (this.state.day_s+'-'+this.state.month_s+'-'+this.state.year_s),
                                     start_day_text: this.state.startDay.day + '-' + this.state.startDay.month
                                     + '-' + this.state.startDay.year,
                                     start_day_state: this.state.startDay

@@ -1,13 +1,26 @@
 import React, { Component } from "react";
-import { Text, View, FlatList, Alert, TextInput } from "react-native";
-import { Button, Header, Icon } from "react-native-elements";
+import { Text, View, FlatList, Alert, TextInput, TouchableOpacity } from "react-native";
+import { Button, Header } from "react-native-elements";
 import Swipeout from "react-native-swipeout";
-
+//import { Icon } from "react-native-elements";
 import firebase from "react-native-firebase";
-
+import Icon from "react-native-vector-icons/FontAwesome";
 import AddRecordModal from "./AddRecordModal";
+//import { TouchableOpacity } from "react-native-gesture-handler";
 
 class NameItem extends Component {
+  _onPressManageButton = () => {
+    this.props.refMainView.props.navigation.navigate('SPRecordScreen', {
+      item: this.props.item,
+      itemId: this.props.item.id
+    })
+  }
+
+  _onPressDeleteRecord = () => {
+    firebase.firestore().collection('SPRecordList')
+            .doc(this.props.item.id).delete();
+  } 
+
   render() {
     const swipeSettings = {
       autoClose: true,
@@ -20,34 +33,27 @@ class NameItem extends Component {
 
       right: [
         {
-          type: "primary",
-          text: "Manage",
-          backgroundColor: "#0085ff",
-          onPress: () => {
-            this.props.refMainView.props.navigation.navigate('SPRecordScreen', {
-              item: this.props.item,
-              itemId: this.props.item.id
-            })
-          }
-        },
-        {
-          type: "delete",
-          text: "Delete",
-          backgroundColor: "#ff0000",
-          onPress: () => {
-            firebase.firestore().collection('SPRecordList')
-            .doc(this.props.item.id).delete();
-          }
+          backgroundColor: '#fff',
+          onPress: this._onPressDeleteRecord,
+          component: (
+            <View style = {{flex: 1, justifyContent: 'center', alignItems: 'center', borderWidth: 1, borderRightWidth: 0}}>
+              <Icon name="trash" size={27} color="#b32400" />              
+            </View>
+          )
         }
       ],
       
     };
     return (
       <Swipeout {...swipeSettings}>
+      <TouchableOpacity
+        onPress = {this._onPressManageButton}
+        activeOpacity = {0.7}
+      >
         <View style = {{ flex: 1, justifyContent: "space-around", paddingLeft: 10, paddingVertical: 5,
           borderTopWidth:    8, borderTopColor:    "#fff",
-          borderBottomWidth: 4, borderBottomColor: "#ffa500",
-          borderLeftWidth:   8, borderLeftColor:   "#ffa500", 
+          borderBottomWidth: 1, borderBottomColor: "#ffa500",
+          borderLeftWidth:   1, borderLeftColor:   "#ffa500", 
           borderRightWidth:  8, borderRightColor:  "#fff",
           backgroundColor:                         "#fff"
         }}>
@@ -61,11 +67,12 @@ class NameItem extends Component {
             {this.props.item.startDay.day != null ? " " + this.props.item.startDay.day + '/' + this.props.item.startDay.month + '/' + this.props.item.startDay.year : " Not updated"}
           </Text>
         </View>
+        </TouchableOpacity>
       </Swipeout>
     );
   }
 }
-export default class MainView extends Component {
+export default class SPMainScreen extends Component {
   constructor(props) {
     super(props);
 
@@ -74,7 +81,7 @@ export default class MainView extends Component {
     this.state = {
       // for firestore
       loading: true,
-      record: []
+      recordList: []
     };
 
     this._onPressAdd = this._onPressAdd.bind(this);
@@ -92,12 +99,12 @@ export default class MainView extends Component {
       });
     });
     this.setState({
-      record: names.sort((a,b) => 
+      recordList: names.sort((a,b) => 
               {return a.startDay.timestamp > b.startDay.timestamp}),
       loading: false
     });
     console.log('Line 96');
-    console.log(this.state.record);
+    console.log(this.state.recordList);
   };
 
   componentDidMount() {
@@ -149,7 +156,7 @@ export default class MainView extends Component {
 
         <View style = {{ flex: 8, backgroundColor: "#fff" }}>
           <FlatList
-            data = { this.state.record }
+            data = { this.state.recordList }
 
             renderItem = {({ item, index }) => {
               return (<NameItem 

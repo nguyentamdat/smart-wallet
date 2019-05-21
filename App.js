@@ -7,8 +7,9 @@ import firebase from "react-native-firebase";
 import Main from "./src/components/Main/Main";
 import ListOfPurpose from "./src/components/PurposeSelectScreen/ListOfPurpose";
 import AdvancedSearchScreen from "./src/components/AdvancedSearch/screens/AdvancedSearch";
-import RecordView from "./src/components/SpendingPlan/RecordView";
 import Notification from "./src/components/Notification"
+import SPRecordScreen from "./src/components/SpendingPlan/SPRecordScreen";
+
 const navigator = createStackNavigator(
   {
     Main: Main
