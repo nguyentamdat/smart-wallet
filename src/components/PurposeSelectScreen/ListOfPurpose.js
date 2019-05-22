@@ -48,33 +48,19 @@ export default class ListOfPurpose extends Component {
         //     });
         // }
 
-        let singleSelect = this.props.navigation.state.params.isSingleSelect;
-        if (singleSelect === true) {
-            this.setState({
-                isSingleSelect: singleSelect
-            });
-        } else {
-            console.log("Willmount purpose");
-            this.setState({
-                isSingleSelect: singleSelect,
-                purposeInList: this.props.navigation.state.params.purposeInList,
-                isAllSelected_E: this.props.navigation.state.params
-                    .isAllSelected_E,
-                isAllSelected_R: this.props.navigation.state.params
-                    .isAllSelected_R
-            });
-        }
+        this.setState({
+            isSingleSelect: this.props.navigation.state.params.isSingleSelect,
+            purposeInList: this.props.navigation.state.params.purposeInList,
+            isAllSelected_E: this.props.navigation.state.params.isAllSelected_E,
+            isAllSelected_R: this.props.navigation.state.params.isAllSelected_R
+        });
     }
 
     componentDidMount() {
-        console.log("didmount purpose");
-
         let map = new Map();
         this.state.purposeInList.forEach(purpose => {
             map.set(purpose.id, true);
         });
-        console.log("purposeInList: ", this.state.purposeInList);
-        console.log("map purpose:", map);
         /*** Check status before rendering ***/
         this.state.listPurpose.forEach(p => {
             if (map.has(p.id)) {
