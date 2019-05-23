@@ -121,7 +121,8 @@ export default class SPMainScreen extends Component {
   }
 
   _onPressBack() {
-    this.props.navigation.navigate('Main');
+    //this.props.navigation.navigate('Main');
+    this.props.navigation.goBack();
   }
 
   render() {
@@ -137,11 +138,11 @@ export default class SPMainScreen extends Component {
           centerContainerStyle = {{ flex: 2 }}
 
           leftComponent = {{ 
-            type: "material-community",
-            icon: "chevron-left", 
-            color: "#0085ff",
-            size: 33,
-            onPress: this._onPressBack
+            // type: "material-community",
+            // icon: "chevron-left", 
+            // color: "#0085ff",
+            // size: 33,
+            // onPress: this._onPressBack
           }}
 
           rightComponent = {{
