@@ -47,13 +47,18 @@ export default class ListOfPurpose extends Component {
         //         listPurpose: JSON.parse(savedPurposes)
         //     });
         // }
+        let singleSelect = this.props.navigation.state.params.isSingleSelect;
+        this.setState({ isSingleSelect: singleSelect });
 
-        this.setState({
-            isSingleSelect: this.props.navigation.state.params.isSingleSelect,
-            purposeInList: this.props.navigation.state.params.purposeInList,
-            isAllSelected_E: this.props.navigation.state.params.isAllSelected_E,
-            isAllSelected_R: this.props.navigation.state.params.isAllSelected_R
-        });
+        if (singleSelect === false) {
+            this.setState({
+                purposeInList: this.props.navigation.state.params.purposeInList,
+                isAllSelected_E: this.props.navigation.state.params
+                    .isAllSelected_E,
+                isAllSelected_R: this.props.navigation.state.params
+                    .isAllSelected_R
+            });
+        }
     }
 
     componentDidMount() {

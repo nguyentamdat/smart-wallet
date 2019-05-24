@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { TouchableOpacity } from "react-native";
 import {
     Container,
     Header,
@@ -20,6 +21,7 @@ import {
 import { firebaseApp } from "../../../database/firebase";
 import firebase from "react-native-firebase";
 import styles from "../styles";
+import commonColor from "../../../variables/commonColor";
 //import console from "console";
 
 export default class SearchResultScreen extends Component {
@@ -62,6 +64,7 @@ export default class SearchResultScreen extends Component {
 
     _searchQuery() {
         let othersQueries = [];
+        let allPromises = [];
         // Query Money
         othersQueries.push(
             this.dbRef
@@ -77,9 +80,13 @@ export default class SearchResultScreen extends Component {
                 .get()
         );
         // Query Note
-        othersQueries.push(
-            this.dbRef.where("note", "array-contains", this.state.note).get()
-        );
+        if (this.state.note.length > 0) {
+            othersQueries.push(
+                this.dbRef
+                    .where("note", "array-contains", this.state.note)
+                    .get()
+            );
+        }
         // Aggregate all queries above
         let othersPromise = Promise.all(othersQueries)
             .then(querysnapShot => {
@@ -88,43 +95,58 @@ export default class SearchResultScreen extends Component {
             .catch(reason => {
                 console.log(reason);
             });
+        allPromises.push(othersPromise);
         // Query Purposes
-        let queriesPurpose = this.state.purposesChosen.map(purpose => {
-            return this.dbRef.where("purpose.id", "==", purpose.id).get();
-        });
-        // Aggregate all purpose's queries with OR logical
-        let purposePromise = Promise.all(queriesPurpose)
-            .then(querySnapshotPurpose => {
-                querySnapshotPurpose = querySnapshotPurpose.map(
-                    snapshot => snapshot.docs
-                );
-                if (querySnapshotPurpose.length > 0) {
-                    return querySnapshotPurpose.reduce(
-                        (accumulator, current) => [...accumulator, ...current]
-                    );
-                }
-                return querySnapshotPurpose;
-            })
-            .catch(reason => {
-                console.log(reason);
+        if (this.state.purposesChosen.length > 0) {
+            let queriesPurpose = this.state.purposesChosen.map(purpose => {
+                return this.dbRef.where("purpose.id", "==", purpose.id).get();
             });
-        // Aggregate all queries with AND logical
-        Promise.all([othersPromise, purposePromise])
-            .then(docsArray => {
-                docsArray = [...docsArray[0], docsArray[1]];
-
-                return docsArray.reduce((accumulator, current) => {
-                    if (current.length > 0) {
-                        if (accumulator.length > 0) {
-                            let map = new Map();
-                            accumulator.forEach(doc => map.set(doc.id, true));
-                            accumulator = current.filter(doc =>
-                                map.has(doc.id)
-                            );
-                        } else {
-                            return current;
-                        }
+            // Aggregate all purpose's queries with OR logical
+            let purposePromise = Promise.all(queriesPurpose)
+                .then(querySnapshotPurpose => {
+                    querySnapshotPurpose = querySnapshotPurpose.map(
+                        snapshot => snapshot.docs
+                    );
+                    if (querySnapshotPurpose.length > 0) {
+                        return querySnapshotPurpose.reduce(
+                            (accumulator, current) => [
+                                ...accumulator,
+                                ...current
+                            ]
+                        );
                     }
+                    return querySnapshotPurpose;
+                })
+                .catch(reason => {
+                    console.log(reason);
+                });
+            allPromises.push(purposePromise);
+        }
+        // Aggregate all queries with AND logical
+        Promise.all(allPromises)
+            .then(docsArray => {
+                if (docsArray.length === 1) {
+                    docsArray = [...docsArray[0]];
+                } else {
+                    docsArray = [...docsArray[0], docsArray[1]];
+                }
+                console.log("docsArray: ", docsArray);
+                return docsArray.reduce((accumulator, current) => {
+                    // if (current.length > 0) {
+                    //     if (accumulator.length > 0) {
+                    //         let map = new Map();
+                    //         accumulator.forEach(doc => map.set(doc.id, true));
+                    //         accumulator = current.filter(doc =>
+                    //             map.has(doc.id)
+                    //         );
+                    //     } else {
+                    //         return current;
+                    //     }
+                    // }
+                    let map = new Map();
+                    accumulator.forEach(doc => map.set(doc.id, true));
+                    accumulator = current.filter(doc => map.has(doc.id));
+
                     return accumulator;
                 });
             })
@@ -139,149 +161,6 @@ export default class SearchResultScreen extends Component {
                 console.log(reason);
             });
     }
-
-    // _search = () => {
-    //     this.unsubcribe = this.database
-    //         .collection("transactions")
-    //         .where("amount", ">=", this.state.moneyStart)
-    //         .where("amount", "<=", this.state.moneyEnd)
-    //         .onSnapshot(
-    //             { includeMetadataChanges: true },
-    //             querySnapshot => {
-    //                 let moneyResults = [];
-    //                 querySnapshot.forEach(doc => {
-    //                     moneyResults.push({ id: doc.id, data: doc.data() });
-    //                 });
-    //                 moneyResults = moneyResults.sort((a, b) => {
-    //                     return a.data.date <= b.data.date;
-    //                 });
-
-    //                 this.setState({
-    //                     resultsList: moneyResults
-    //                 });
-    //             },
-    //             error => {
-    //                 console.log("Error getting moneyResults: ", error);
-    //             }
-    //         );
-
-    //     if (this.state.purposesChosen.length > 0) {
-    //         this.state.purposesChosen.forEach(purpose => {
-    //             this.unsubcribe = this.database
-    //                 .collection("transactions")
-    //                 .where("purpose.id", "==", purpose.id)
-    //                 .onSnapshot(
-    //                     querySnapshot => {
-    //                         let purposeList = this.state.purposeResults;
-    //                         querySnapshot.forEach(doc => {
-    //                             purposeList.push({
-    //                                 id: doc.id,
-    //                                 data: doc.data()
-    //                             });
-    //                         });
-    //                         purposeList = purposeList.sort((a, b) => {
-    //                             return a.data.date <= b.data.date;
-    //                         });
-
-    //                         this.setState({
-    //                             purposeResults: purposeList
-    //                         });
-    //                     },
-    //                     error => {
-    //                         console.log(
-    //                             "Error getting purposeResults: ",
-    //                             error
-    //                         );
-    //                     }
-    //                 );
-    //         });
-    //     }
-
-    //     this.unsubcribe = this.database
-    //         .collection("transactions")
-    //         .where("date", ">=", this.state.timeStart)
-    //         .where("date", "<=", this.state.timeEnd)
-    //         .onSnapshot(
-    //             querySnapshot => {
-    //                 if (this.state.purposeResults.length > 0) {
-    //                     /*** Filter by Purpose */
-    //                     let mapForPurpose = new Map();
-    //                     this.state.purposeResults.forEach(result =>
-    //                         mapForPurpose.set(result.id, true)
-    //                     );
-    //                     let resultsNew = this.state.resultsList.filter(result =>
-    //                         mapForPurpose.has(result.id)
-    //                     );
-    //                     /*** Filter by Time */
-    //                     let timeResults = [];
-    //                     querySnapshot.forEach(doc => {
-    //                         timeResults.push({ id: doc.id, data: doc.data() });
-    //                     });
-
-    //                     let map = new Map();
-    //                     timeResults.forEach(result => map.set(result.id, true));
-    //                     timeResults = resultsNew.filter(result =>
-    //                         map.has(result.id)
-    //                     );
-    //                     timeResults.sort((a, b) => {
-    //                         return a.data.date <= b.data.date;
-    //                     });
-
-    //                     this.setState({
-    //                         purposeResults: [],
-    //                         resultsList: timeResults
-    //                     });
-    //                 } else {
-    //                     let timeResults = [];
-    //                     querySnapshot.forEach(doc => {
-    //                         timeResults.push({ id: doc.id, data: doc.data() });
-    //                     });
-
-    //                     let map = new Map();
-    //                     timeResults.forEach(result => map.set(result.id, true));
-    //                     timeResults = this.state.resultsList.filter(result =>
-    //                         map.has(result.id)
-    //                     );
-    //                     timeResults.sort((a, b) => {
-    //                         return a.data.date <= b.data.date;
-    //                     });
-
-    //                     this.setState({ resultsList: timeResults });
-    //                 }
-    //             },
-    //             error => {
-    //                 console.log("Error getting timeResults: ", error);
-    //             }
-    //         );
-
-    //     if (this.state.note.length > 0) {
-    //         this.unsubcribe = this.database
-    //             .collection("transactions")
-    //             .where("note", "array-contains", this.state.note)
-    //             .onSnapshot(
-    //                 querySnapshot => {
-    //                     let noteResults = [];
-    //                     querySnapshot.forEach(doc => {
-    //                         noteResults.add(doc);
-    //                     });
-
-    //                     let map = new Map();
-    //                     noteResults.forEach(result => map.set(result.id));
-    //                     noteResults = this.state.resultsList.filter(result =>
-    //                         map.has(result.id)
-    //                     );
-    //                     noteResults.sort((a, b) => {
-    //                         return a.data.date <= b.data.date;
-    //                     });
-
-    //                     this.setState({ results: noteResults });
-    //                 },
-    //                 error => {
-    //                     console.log("Error getting noteResults: ", error);
-    //                 }
-    //             );
-    //     }
-    // };
 
     render() {
         return (
@@ -301,6 +180,49 @@ export default class SearchResultScreen extends Component {
                 </Header>
                 {this.state.loading ? (
                     <Spinner />
+                ) : this.state.resultsList.length === 0 ? (
+                    <Content
+                        contentContainerStyle={{
+                            backgroundColor: commonColor.separatorBg,
+                            justifyContent: "center",
+                            alignItems: "center",
+                            flex: 1
+                        }}
+                    >
+                        <TouchableOpacity
+                            style={{
+                                alignSelf: "center",
+                                alignItems: "center"
+                            }}
+                            onPress={() => this.props.navigation.goBack()}
+                        >
+                            <Icon
+                                type="Entypo"
+                                name="emoji-sad"
+                                style={{
+                                    fontSize: 30,
+                                    color: commonColor.inputPlaceholder
+                                }}
+                            />
+                            <Text
+                                style={{
+                                    marginTop: 10,
+                                    fontSize: 20,
+                                    color: commonColor.inputPlaceholder
+                                }}
+                            >
+                                Không tìm thấy kết quả phù hợp
+                            </Text>
+                            <Text
+                                style={{
+                                    fontSize: 20,
+                                    color: commonColor.inputPlaceholder
+                                }}
+                            >
+                                Hãy thử lại nhé!
+                            </Text>
+                        </TouchableOpacity>
+                    </Content>
                 ) : (
                     <Content>
                         {this.state.resultsList.map(result => {
